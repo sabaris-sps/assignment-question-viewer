@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Questions Viewer</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Add user info display -->
+    <div class="user-info" id="userInfo" style="display: none">
+      <span id="userEmail"></span>
+      <button class="logout-button" id="logoutButton">Logout</button>
+    </div>
+
+    <!-- Add auth container (initially hidden) -->
+    <div class="auth-container" id="authContainer" style="display: none">
+      <div class="auth-box">
+        <div class="auth-title" id="authTitle">Login</div>
+        <div class="auth-error" id="authError"></div>
+        <form class="auth-form" id="authForm">
+          <input
+            type="email"
+            id="authEmail"
+            class="auth-input"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            id="authPassword"
+            class="auth-input"
+            placeholder="Password"
+            required
+          />
+          <button type="submit" class="auth-button" id="authSubmit">
+            Login
+          </button>
+          <div class="auth-switch" id="authSwitch">
+            Need to create an account?
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h2>Questions</h2>
+      <div class="question-list" id="questionList">
+        <!-- Question numbers will be inserted here by JavaScript -->
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="assignment-selector">
+        <div class="dropdown-container">
+          <label for="chapterSelect">Chapter:</label>
+          <select id="chapterSelect"></select>
+        </div>
+        <div class="dropdown-container">
+          <label for="assignmentSelect">Assignment:</label>
+          <select id="assignmentSelect"></select>
+        </div>
+        <div class="assignment-title" id="assignmentTitle">
+          Select an assignment
+        </div>
+      </div>
+
+      <div class="question-container">
+        <h2 id="currentQuestion">Select an assignment to begin</h2>
+        <div id="questionContent">
+          <img
+            id="questionImage"
+            class="question-image"
+            src=""
+            alt="Question image"
+            style="display: none"
+          />
+        </div>
+
+        <div class="notes-container" style="display: none">
+          <h3>My Notes</h3>
+          <textarea
+            id="notesArea"
+            class="notes-area"
+            placeholder="Write your notes here..."
+          ></textarea>
+        </div>
+
+        <div class="navigation" style="display: none">
+          <button id="prevButton" class="nav-button" disabled>Previous</button>
+          <button id="nextButton" class="nav-button" disabled>Next</button>
+        </div>
+
+        <div class="mark-options" style="display: none">
+          <button id="markDoneButton" class="mark-button done">Done</button>
+          <button id="markReviewButton" class="mark-button review">
+            Review
+          </button>
+          <button id="markNoneButton" class="mark-button none">None</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
