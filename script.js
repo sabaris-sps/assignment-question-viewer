@@ -62,14 +62,6 @@ const assignmentData = {
     name: "EMI",
     assignments: {
       cpp4: { name: "CPP 4", questionCount: 46 },
-      cpp5: { name: "CPP 5 - TVMF", questionCount: 20 },
-    },
-  },
-  current: {
-    name: "Current Electricity",
-    assignments: {
-      cpp4: { name: "CPP 1a", questionCount: 35 },
-      cpp5: { name: "CPP 1b - RC", questionCount: 15 },
     },
   },
 };
