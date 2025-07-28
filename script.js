@@ -25,7 +25,7 @@ const state = {
   currentChapter: "emi",
   currentAssignment: "cpp4",
   currentQuestion: 1,
-  totalQuestions: 46,
+  totalQuestions: 47,
   textareaHasFocus: false,
   isLoginMode: true,
 };
@@ -61,7 +61,7 @@ const assignmentData = {
   emi: {
     name: "EMI",
     assignments: {
-      cpp4: { name: "CPP 4", questionCount: 46 },
+      cpp4: { name: "CPP 4", questionCount: 47 },
     },
   },
 };
