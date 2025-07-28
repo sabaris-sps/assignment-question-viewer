@@ -25,6 +25,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  margin-bottom: 50px;
 }
 
 .question-number {
@@ -47,22 +48,22 @@ body {
 }
 
 .question-number.marked-done::after {
-  content: "✓";
+  content: "✔";
   position: absolute;
-  top: -5px;
+  top: -10px;
   right: -5px;
-  color: #27ae60;
-  font-size: 16px;
-  font-weight: bold;
+  color: #bef312;
+  font-size: 20px;
+  font-weight: lighter;
 }
 
 .question-number.marked-review::after {
-  content: "?";
+  content: "✷";
   position: absolute;
-  top: -5px;
+  top: -10px;
   right: -5px;
-  color: #f39c12;
-  font-size: 16px;
+  color: #f1c40f;
+  font-size: 20px;
   font-weight: bold;
 }
 

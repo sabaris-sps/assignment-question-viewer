@@ -64,6 +64,12 @@ const assignmentData = {
       cpp4: { name: "CPP 4", questionCount: 47 },
     },
   },
+  chemistry: {
+    name: "Chemistry",
+    assignments: {
+      amines: { name: "Amines", questionCount: 51 },
+    },
+  },
 };
 // Initialize authentication
 const initAuth = () => {
@@ -149,9 +155,10 @@ const initDropdowns = () => {
     state.currentChapter = e.target.value;
     const currentChapterData =
       assignmentData[state.currentChapter]["assignments"];
+
+    state.currentAssignment = Object.keys(currentChapterData)[0];
     state.totalQuestions =
       currentChapterData[state.currentAssignment]["questionCount"] || 1;
-
     elements.assignmentSelect.innerHTML = "";
 
     Object.entries(currentChapterData).forEach(([id, details]) => {
