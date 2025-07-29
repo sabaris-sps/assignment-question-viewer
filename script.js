@@ -319,11 +319,11 @@ const setupEventListeners = () => {
   elements.markReviewButton.addEventListener("click", async () => {
     await saveMarkStatus(state.currentQuestion, "review");
   });
-  elements.markNoneButton.addEventListener("click", async () => {
-    await saveMarkStatus(state.currentQuestion, "none");
-  });
   elements.markDoubtButton.addEventListener("click", async () => {
     await saveMarkStatus(state.currentQuestion, "doubt");
+  });
+  elements.markNoneButton.addEventListener("click", async () => {
+    await saveMarkStatus(state.currentQuestion, "none");
   });
 
   // Keyboard navigation
@@ -489,7 +489,7 @@ const updateQuestionNumberStyle = (questionNumber, status) => {
     questionElement.classList.remove(
       "marked-done",
       "marked-review",
-      "mark-doubt"
+      "marked-doubt"
     );
 
     if (status === "done") {
