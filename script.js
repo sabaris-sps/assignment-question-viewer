@@ -14,12 +14,10 @@ const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Enable Firestore persistence
 db.enablePersistence().catch((err) => {
   console.error("Firestore persistence failed:", err);
 });
 
-// Application state
 const state = {
   currentUser: null,
   currentChapter: "emi",
@@ -30,7 +28,6 @@ const state = {
   isLoginMode: true,
 };
 
-// DOM Elements - make sure these match your HTML IDs
 const elements = {
   authContainer: document.getElementById("authContainer"),
   authTitle: document.getElementById("authTitle"),
@@ -51,6 +48,7 @@ const elements = {
   nextButton: document.getElementById("nextButton"),
   markDoneButton: document.getElementById("markDoneButton"),
   markReviewButton: document.getElementById("markReviewButton"),
+  markDoubtButton: document.getElementById("markDoubtButton"),
   markNoneButton: document.getElementById("markNoneButton"),
   notesArea: document.getElementById("notesArea"),
   questionImage: document.getElementById("questionImage"),
@@ -72,7 +70,7 @@ const assignmentData = {
     },
   },
 };
-// Initialize authentication
+
 const initAuth = () => {
   auth.onAuthStateChanged(async (user) => {
     state.currentUser = user;
@@ -117,7 +115,6 @@ const initAuth = () => {
   });
 };
 
-// Initialize application
 const initApp = async () => {
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
@@ -130,7 +127,6 @@ const initApp = async () => {
   await loadQuestion(1);
 };
 
-// Initialize dropdowns
 const initDropdowns = () => {
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
@@ -181,7 +177,7 @@ const initDropdowns = () => {
     loadAssignment();
   });
 };
-// Modified loadAssignment function
+
 const loadAssignment = async () => {
   try {
     // Reset UI
@@ -213,6 +209,7 @@ const loadAssignment = async () => {
     console.error("Error loading assignment:", error);
   }
 };
+
 const loadAllMarkStatuses = async () => {
   try {
     if (!state.currentUser) {
@@ -257,7 +254,7 @@ const loadAllMarkStatuses = async () => {
     }
   }
 };
-// Load question - FIXED VERSION
+
 const loadQuestion = async (questionNumber) => {
   try {
     // Save current notes before loading new question
@@ -295,16 +292,13 @@ const loadQuestion = async (questionNumber) => {
   }
 };
 
-// Set up all event listeners
 const setupEventListeners = () => {
-  // Navigation buttons
   elements.prevButton.addEventListener("click", async () => {
     if (state.currentQuestion > 1) {
       await saveNotes();
       await loadQuestion(state.currentQuestion - 1);
     }
   });
-
   elements.nextButton.addEventListener("click", async () => {
     if (state.currentQuestion < state.totalQuestions) {
       await saveNotes();
@@ -316,13 +310,14 @@ const setupEventListeners = () => {
   elements.markDoneButton.addEventListener("click", async () => {
     await saveMarkStatus(state.currentQuestion, "done");
   });
-
   elements.markReviewButton.addEventListener("click", async () => {
     await saveMarkStatus(state.currentQuestion, "review");
   });
-
   elements.markNoneButton.addEventListener("click", async () => {
     await saveMarkStatus(state.currentQuestion, "none");
+  });
+  elements.markDoubtButton.addEventListener("click", async () => {
+    await saveMarkStatus(state.currentQuestion, "doubt");
   });
 
   // Keyboard navigation
@@ -356,7 +351,7 @@ const setupEventListeners = () => {
     }
   }, 30000);
 };
-// Save notes to Firestore - Updated with proper assignment distinction
+
 const saveNotes = async () => {
   try {
     if (!state.currentUser) {
@@ -386,6 +381,7 @@ const saveNotes = async () => {
     console.error("Error saving notes:", error);
   }
 };
+
 const saveMarkStatus = async (questionNumber, status) => {
   try {
     if (!state.currentUser) return;
@@ -412,7 +408,7 @@ const saveMarkStatus = async (questionNumber, status) => {
     console.error("Error saving mark status:", error);
   }
 };
-// Load notes from Firestore - Updated with proper assignment distinction
+
 const loadNotes = async (questionNumber) => {
   try {
     if (!state.currentUser) {
@@ -440,7 +436,6 @@ const loadNotes = async (questionNumber) => {
   }
 };
 
-// Load mark status from Firestore - Updated with proper assignment distinction
 const loadMarkStatus = async (questionNumber) => {
   try {
     if (!state.currentUser) {
@@ -472,31 +467,35 @@ const loadMarkStatus = async (questionNumber) => {
   }
 };
 
-// Update mark buttons UI
 const updateMarkButtons = (status) => {
   elements.markDoneButton.classList.toggle("active", status === "done");
   elements.markReviewButton.classList.toggle("active", status === "review");
+  elements.markDoubtButton.classList.toggle("active", status === "doubt");
   elements.markNoneButton.classList.toggle("active", status === "none");
 };
 
-// Update question number style based on mark status
 const updateQuestionNumberStyle = (questionNumber, status) => {
   const questionElement = document.querySelector(
     `.question-number[data-question-id="${questionNumber}"]`
   );
 
   if (questionElement) {
-    questionElement.classList.remove("marked-done", "marked-review");
+    questionElement.classList.remove(
+      "marked-done",
+      "marked-review",
+      "mark-doubt"
+    );
 
     if (status === "done") {
       questionElement.classList.add("marked-done");
     } else if (status === "review") {
       questionElement.classList.add("marked-review");
+    } else if (status === "doubt") {
+      questionElement.classList.add("marked-doubt");
     }
   }
 };
 
-// Update authentication UI based on mode (login/signup)
 const updateAuthUI = () => {
   if (state.isLoginMode) {
     elements.authTitle.textContent = "Login";
@@ -510,7 +509,6 @@ const updateAuthUI = () => {
   elements.authError.textContent = "";
 };
 
-// Reset UI when user logs out
 const resetUI = () => {
   elements.questionList.innerHTML = "";
   elements.currentQuestionDisplay.textContent = "Select an assignment to begin";
@@ -521,5 +519,4 @@ const resetUI = () => {
   document.querySelector(".mark-options").style.display = "none";
 };
 
-// Initialize the application
 initAuth();

@@ -48,23 +48,36 @@ body {
 }
 
 .question-number.marked-done::after {
-  content: "✔";
+  content: "✓";
   position: absolute;
   top: -10px;
   right: -5px;
   color: #bef312;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: lighter;
+  text-shadow: -1px 1px 3px rgb(0 0 0);
 }
 
 .question-number.marked-review::after {
-  content: "✷";
+  content: "⋆";
   position: absolute;
-  top: -10px;
+  top: -12px;
   right: -5px;
   color: #f1c40f;
-  font-size: 15px;
+  font-size: 23px;
   font-weight: bold;
+  text-shadow: -1px 1px 3px rgb(0 0 0);
+}
+
+.question-number.marked-doubt::after {
+  content: "!";
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  color: #ff5722;
+  font-size: 18px;
+  font-weight: lighter;
+  text-shadow: -1px 1px 3px rgb(0 0 0);
 }
 
 .main-content {
@@ -159,6 +172,20 @@ body {
 
 .mark-button.review.active {
   background-color: #e67e22;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #f39c12;
+}
+
+
+.mark-button.doubt {
+  background-color: #ff6f00;
+}
+
+.mark-button.doubt:hover {
+  background-color: #ff6f00e2;
+}
+
+.mark-button.doubt.active {
+  background-color: #e66022;
   box-shadow: 0 0 0 2px white, 0 0 0 4px #f39c12;
 }
 
