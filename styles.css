@@ -70,13 +70,13 @@ body {
 }
 
 .question-number.marked-doubt::after {
-  content: "!";
+  content: "‼ ";
   position: absolute;
   top: -6px;
   right: -2px;
   color: #ff5722;
   font-size: 18px;
-  font-weight: lighter;
+  font-weight: bold;
   text-shadow: -1px 1px 3px rgb(0 0 0);
 }
 
