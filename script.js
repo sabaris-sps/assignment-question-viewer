@@ -68,6 +68,7 @@ const assignmentData = {
     name: "Chemistry",
     assignments: {
       amines: { name: "Amines", questionCount: 51 },
+      solidstate: { name: "Solid State", questionCount: 51 },
     },
   },
 };
