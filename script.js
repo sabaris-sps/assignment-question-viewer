@@ -69,6 +69,12 @@ const assignmentData = {
       solidstate: { name: "Solid State", questionCount: 51 },
     },
   },
+  maths: {
+    name: "Maths",
+    assignments: {
+      aod3: { name: "AOD - 3", questionCount: 27 },
+    },
+  },
 };
 
 const initAuth = () => {
