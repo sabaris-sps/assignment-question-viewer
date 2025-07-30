@@ -1,4 +1,3 @@
-// Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyAhm9_dg9I-xucnFaFAMOv_v_lIBQAKyJg",
   authDomain: "physics-question-viewer-1bea8.firebaseapp.com",
@@ -73,6 +72,7 @@ const assignmentData = {
     name: "Maths",
     assignments: {
       aod3: { name: "AOD - 3", questionCount: 27 },
+      iidi: { name: "II & DI", questionCount: 20 },
     },
   },
 };
@@ -188,7 +188,12 @@ const loadAssignment = async () => {
   try {
     // Reset UI
     elements.questionList.innerHTML = "";
-    elements.assignmentTitle.textContent = `${state.currentChapter.toUpperCase()} - ${state.currentAssignment.toUpperCase()}`;
+    assignTitle =
+      assignmentData[state.currentChapter].assignments[state.currentAssignment]
+        .name || "";
+    elements.assignmentTitle.textContent = `${assignmentData[
+      state.currentChapter
+    ].name.toUpperCase()} - ${assignTitle.toUpperCase()}`;
 
     // Create question list
     for (let i = 1; i <= state.totalQuestions; i++) {
@@ -263,11 +268,8 @@ const loadAllMarkStatuses = async () => {
 
 const loadQuestion = async (questionNumber) => {
   try {
-    // Save current notes before loading new question
-
     state.currentQuestion = questionNumber;
 
-    // FIX: Use the correct element reference
     if (elements.currentQuestionDisplay) {
       elements.currentQuestionDisplay.textContent = `Question ${questionNumber}`;
     } else {
@@ -405,6 +407,7 @@ const saveMarkStatus = async (questionNumber, status) => {
         assignment: state.currentAssignment,
         questionNumber: questionNumber,
         markStatus: status,
+        notes: elements.notesArea.value,
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
