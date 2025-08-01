@@ -120,7 +120,6 @@ const loadAssignmentData = async () => {
 
     const userResponse = await fetch("./unrestrictedUsers.json");
     const unrestrictedUsers = await userResponse.json();
-    console.log(unrestrictedUsers);
 
     for (const subjectKey in data) {
       const subject = data[subjectKey];
@@ -151,7 +150,7 @@ const loadAssignmentData = async () => {
         assignmentData[state.currentChapter].assignments
       )[0];
       state.totalQuestions =
-        assignmentData[state.currentDhapter].assignments[
+        assignmentData[state.currentChapter].assignments[
           state.currentAssignment
         ].totalQuestions;
     }
