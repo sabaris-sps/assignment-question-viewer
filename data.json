@@ -1,0 +1,22 @@
+{
+  "emi": {
+    "name": "EMI",
+    "assignments": {
+      "cpp4": { "name": "CPP 4", "questionCount": 47,  "accessForAll": false }
+    }
+  },
+  "chemistry": {
+    "name": "Chemistry",
+    "assignments": {
+      "amines": { "name": "Amines", "questionCount": 51, "accessForAll": true  },
+      "solidstate": { "name": "Solid State", "questionCount": 51,   "accessForAll": true  }
+    }
+  },
+  "maths": {
+    "name": "Maths",
+    "assignments": {
+      "aod3": { "name": "AOD - 3", "questionCount": 27,  "accessForAll": false  },
+      "iidi": { "name": "II & DI", "questionCount": 20,   "accessForAll": false  }
+    }
+  }
+}

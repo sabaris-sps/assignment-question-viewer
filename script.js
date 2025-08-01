@@ -19,10 +19,10 @@ db.enablePersistence().catch((err) => {
 
 const state = {
   currentUser: null,
-  currentChapter: "emi",
-  currentAssignment: "cpp4",
+  // currentChapter: "emi",
+  // currentAssignment: "cpp4",
   currentQuestion: 1,
-  totalQuestions: 47,
+  // totalQuestions: 47,
   textareaHasFocus: false,
   isLoginMode: true,
 };
@@ -54,28 +54,7 @@ const elements = {
   currentQuestionDisplay: document.getElementById("currentQuestion"),
 };
 
-const assignmentData = {
-  emi: {
-    name: "EMI",
-    assignments: {
-      cpp4: { name: "CPP 4", questionCount: 47 },
-    },
-  },
-  chemistry: {
-    name: "Chemistry",
-    assignments: {
-      amines: { name: "Amines", questionCount: 51 },
-      solidstate: { name: "Solid State", questionCount: 51 },
-    },
-  },
-  maths: {
-    name: "Maths",
-    assignments: {
-      aod3: { name: "AOD - 3", questionCount: 27 },
-      iidi: { name: "II & DI", questionCount: 20 },
-    },
-  },
-};
+let assignmentData = {};
 
 const initAuth = () => {
   auth.onAuthStateChanged(async (user) => {
@@ -122,6 +101,7 @@ const initAuth = () => {
 };
 
 const initApp = async () => {
+  await loadAssignmentData();
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
   state.totalQuestions =
@@ -131,6 +111,53 @@ const initApp = async () => {
   await loadAssignment();
   setupEventListeners();
   await loadQuestion(1);
+};
+
+const loadAssignmentData = async () => {
+  try {
+    const response = await fetch("./data.json");
+    const data = await response.json();
+
+    const userResponse = await fetch("./unrestrictedUsers.json");
+    const unrestrictedUsers = await userResponse.json();
+    console.log(unrestrictedUsers);
+
+    for (const subjectKey in data) {
+      const subject = data[subjectKey];
+      let filteredAssignments = {};
+
+      for (const assignmentKey in subject["assignments"]) {
+        const assignment = subject["assignments"][assignmentKey];
+        if (assignment.accessForAll) {
+          filteredAssignments[assignmentKey] = assignment;
+        } else {
+          if (unrestrictedUsers.includes(state.currentUser.email)) {
+            filteredAssignments[assignmentKey] = assignment;
+          }
+        }
+      }
+
+      if (Object.keys(filteredAssignments).length != 0) {
+        assignmentData[subjectKey] = {
+          name: subject.name,
+          assignments: filteredAssignments,
+        };
+      }
+    }
+
+    if (Object.keys(assignmentData).length != 0) {
+      state.currentChapter = Object.keys(assignmentData)[0];
+      state.currentAssignment = Object.keys(
+        assignmentData[state.currentChapter].assignments
+      )[0];
+      state.totalQuestions =
+        assignmentData[state.currentDhapter].assignments[
+          state.currentAssignment
+        ].totalQuestions;
+    }
+  } catch (error) {
+    console.error("Error loading json data ", error);
+  }
 };
 
 const initDropdowns = () => {
