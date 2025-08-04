@@ -80,6 +80,17 @@ body {
   text-shadow: -1px 1px 3px rgb(0 0 0);
 }
 
+.question-number.marked-good::after {
+  content: "Օ";
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  color: #e199ff;
+  font-size: 17px;
+  font-weight: lighter;
+  text-shadow: -1px 1px 3px rgb(0 0 0);
+}
+
 .main-content {
   margin-left: 240px;
   padding: 20px;
@@ -187,6 +198,20 @@ body {
 .mark-button.doubt.active {
   background-color: #e66022;
   box-shadow: 0 0 0 2px white, 0 0 0 4px #f39c12;
+}
+
+
+.mark-button.good {
+  background-color: #9b59b6;
+}
+
+.mark-button.good:hover {
+  background-color: #8e44ad;
+}
+
+.mark-button.good.active {
+  background-color: #7d3c98;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #9b59b6;
 }
 
 .mark-button.none {

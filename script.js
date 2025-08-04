@@ -19,12 +19,10 @@ db.enablePersistence().catch((err) => {
 
 const state = {
   currentUser: null,
-  // currentChapter: "emi",
-  // currentAssignment: "cpp4",
   currentQuestion: 1,
-  // totalQuestions: 47,
   textareaHasFocus: false,
   isLoginMode: true,
+  markStatusTypes: ["done", "good", "review", "doubt", "none"],
 };
 
 const elements = {
@@ -45,13 +43,14 @@ const elements = {
   questionList: document.getElementById("questionList"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
-  markDoneButton: document.getElementById("markDoneButton"),
-  markReviewButton: document.getElementById("markReviewButton"),
-  markDoubtButton: document.getElementById("markDoubtButton"),
-  markNoneButton: document.getElementById("markNoneButton"),
+  // markDoneButton: document.getElementById("markDoneButton"),
+  // markReviewButton: document.getElementById("markReviewButton"),
+  // markDoubtButton: document.getElementById("markDoubtButton"),
+  // markNoneButton: document.getElementById("markNoneButton"),
   notesArea: document.getElementById("notesArea"),
   questionImage: document.getElementById("questionImage"),
   currentQuestionDisplay: document.getElementById("currentQuestion"),
+  markOptions: document.getElementById("markOptions"),
 };
 
 let assignmentData = {};
@@ -101,6 +100,7 @@ const initAuth = () => {
 };
 
 const initApp = async () => {
+  createMarkButtons();
   await loadAssignmentData();
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
@@ -111,6 +111,34 @@ const initApp = async () => {
   await loadAssignment();
   setupEventListeners();
   await loadQuestion(1);
+};
+
+const createMarkButtons = () => {
+  elements.markOptions.innerHTML = "";
+
+  // Create a button for each status type
+  state.markStatusTypes.forEach((status) => {
+    const button = document.createElement("button");
+    button.id = `mark${status.charAt(0).toUpperCase() + status.slice(1)}Button`;
+    button.className = `mark-button ${status}`;
+    button.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+
+    // Add click event
+    button.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await saveMarkStatus(state.currentQuestion, status);
+    });
+
+    elements.markOptions.appendChild(button);
+  });
+
+  // Update elements object with the new buttons
+  state.markStatusTypes.forEach((status) => {
+    const capitalized = status.charAt(0).toUpperCase() + status.slice(1);
+    elements[`mark${capitalized}Button`] = document.getElementById(
+      `mark${capitalized}Button`
+    );
+  });
 };
 
 const loadAssignmentData = async () => {
@@ -503,10 +531,13 @@ const loadMarkStatus = async (questionNumber) => {
 };
 
 const updateMarkButtons = (status) => {
-  elements.markDoneButton.classList.toggle("active", status === "done");
-  elements.markReviewButton.classList.toggle("active", status === "review");
-  elements.markDoubtButton.classList.toggle("active", status === "doubt");
-  elements.markNoneButton.classList.toggle("active", status === "none");
+  state.markStatusTypes.forEach((type) => {
+    const button =
+      elements[`mark${type.charAt(0).toUpperCase() + type.slice(1)}Button`];
+    if (button) {
+      button.classList.toggle("active", status === type);
+    }
+  });
 };
 
 const updateQuestionNumberStyle = (questionNumber, status) => {
@@ -515,18 +546,20 @@ const updateQuestionNumberStyle = (questionNumber, status) => {
   );
 
   if (questionElement) {
-    questionElement.classList.remove(
-      "marked-done",
-      "marked-review",
-      "marked-doubt"
-    );
+    state.markStatusTypes.forEach((markStatus) => {
+      questionElement.classList.remove(`marked-${markStatus}`);
+    });
 
-    if (status === "done") {
-      questionElement.classList.add("marked-done");
-    } else if (status === "review") {
-      questionElement.classList.add("marked-review");
-    } else if (status === "doubt") {
-      questionElement.classList.add("marked-doubt");
+    // if (status === "done") {
+    //   questionElement.classList.add("marked-done");
+    // } else if (status === "review") {
+    //   questionElement.classList.add("marked-review");
+    // } else if (status === "doubt") {
+    //   questionElement.classList.add("marked-doubt");
+    // }
+
+    if (state.markStatusTypes.includes(status) && status !== "none") {
+      questionElement.classList.add(`marked-${status}`);
     }
   }
 };
