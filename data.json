@@ -4,7 +4,8 @@
     "assignments": {
       "cpp4": { "name": "CPP 4", "questionCount": 47,  "accessForAll": false },
       "cpp5a": { "name": "CPP 5a - Inductors Transient State", "questionCount": 20,  "accessForAll": false },
-      "cpp6": { "name": "CPP 6 - INDUCTORS", "questionCount": 61,  "accessForAll": false }
+      "cpp6": { "name": "CPP 6 - INDUCTORS", "questionCount": 61,  "accessForAll": false }, 
+      "emipckg": { "name": "PCKG", "questionCount": 33,  "accessForAll": true }
     }
   },
   "chemistry": {
