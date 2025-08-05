@@ -21,5 +21,11 @@
       "aod3": { "name": "AOD - 3", "questionCount": 27,  "accessForAll": false  },
       "iidi": { "name": "II & DI", "questionCount": 20,   "accessForAll": false  }
     }
+  },
+  "area": {
+    "name": "Area",
+    "assignments": {
+      "areapckg": { "name": "PCKG", "questionCount": 63,  "accessForAll": true  }
+    }
   }
 }
