@@ -351,3 +351,32 @@ label {
   cursor: pointer;
   margin-left: 5px;
 }
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+#currentQuestion {
+  margin: 0;
+  flex: 1;
+}
+
+#questionTimer {
+  text-align: center;
+  margin: 10px 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: #2c3e50;
+  background-color: #3498db84;
+  font-weight: lighter;
+  padding: 5px 10px 5px 10px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1
+}

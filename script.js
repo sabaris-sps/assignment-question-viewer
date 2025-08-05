@@ -23,6 +23,8 @@ const state = {
   textareaHasFocus: false,
   isLoginMode: true,
   markStatusTypes: ["done", "good", "review", "doubt", "none"],
+  timerInterval: null,
+  timerSeconds: 0,
 };
 
 const elements = {
@@ -43,14 +45,11 @@ const elements = {
   questionList: document.getElementById("questionList"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
-  // markDoneButton: document.getElementById("markDoneButton"),
-  // markReviewButton: document.getElementById("markReviewButton"),
-  // markDoubtButton: document.getElementById("markDoubtButton"),
-  // markNoneButton: document.getElementById("markNoneButton"),
   notesArea: document.getElementById("notesArea"),
   questionImage: document.getElementById("questionImage"),
   currentQuestionDisplay: document.getElementById("currentQuestion"),
   markOptions: document.getElementById("markOptions"),
+  questionTimer: document.getElementById("questionTimer"),
 };
 
 let assignmentData = {};
@@ -323,6 +322,7 @@ const loadAllMarkStatuses = async () => {
 const loadQuestion = async (questionNumber) => {
   try {
     state.currentQuestion = questionNumber;
+    startQuestionTimer();
 
     if (elements.currentQuestionDisplay) {
       elements.currentQuestionDisplay.textContent = `Question ${questionNumber}`;
@@ -366,20 +366,6 @@ const setupEventListeners = () => {
       await saveNotes();
       await loadQuestion(state.currentQuestion + 1);
     }
-  });
-
-  // Mark buttons
-  elements.markDoneButton.addEventListener("click", async () => {
-    await saveMarkStatus(state.currentQuestion, "done");
-  });
-  elements.markReviewButton.addEventListener("click", async () => {
-    await saveMarkStatus(state.currentQuestion, "review");
-  });
-  elements.markDoubtButton.addEventListener("click", async () => {
-    await saveMarkStatus(state.currentQuestion, "doubt");
-  });
-  elements.markNoneButton.addEventListener("click", async () => {
-    await saveMarkStatus(state.currentQuestion, "none");
   });
 
   // Keyboard navigation
@@ -550,18 +536,37 @@ const updateQuestionNumberStyle = (questionNumber, status) => {
       questionElement.classList.remove(`marked-${markStatus}`);
     });
 
-    // if (status === "done") {
-    //   questionElement.classList.add("marked-done");
-    // } else if (status === "review") {
-    //   questionElement.classList.add("marked-review");
-    // } else if (status === "doubt") {
-    //   questionElement.classList.add("marked-doubt");
-    // }
-
     if (state.markStatusTypes.includes(status) && status !== "none") {
       questionElement.classList.add(`marked-${status}`);
     }
   }
+};
+
+const startQuestionTimer = () => {
+  // Clear any existing timer
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+  }
+
+  // Reset seconds
+  state.timerSeconds = 0;
+
+  // Update display immediately
+  updateTimerDisplay();
+
+  // Start new interval
+  state.timerInterval = setInterval(() => {
+    state.timerSeconds++;
+    updateTimerDisplay();
+  }, 1000);
+};
+
+const updateTimerDisplay = () => {
+  const minutes = Math.floor(state.timerSeconds / 60);
+  const seconds = state.timerSeconds % 60;
+  elements.questionTimer.textContent = `${minutes}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
 };
 
 const updateAuthUI = () => {
@@ -578,6 +583,12 @@ const updateAuthUI = () => {
 };
 
 const resetUI = () => {
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+  elements.questionTimer.textContent = "";
+
   elements.questionList.innerHTML = "";
   elements.currentQuestionDisplay.textContent = "Select an assignment to begin";
   elements.assignmentTitle.textContent = "Select an assignment";
