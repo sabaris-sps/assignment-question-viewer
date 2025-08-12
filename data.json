@@ -27,5 +27,13 @@
     "assignments": {
       "areapckg": { "name": "PCKG", "questionCount": 63,  "accessForAll": true  }
     }
+  },
+  "liquid": {
+    "name": "Liquid Solution",
+    "assignments": {
+      "ex1": { "name": "Exercise 1", "questionCount": 13,  "accessForAll": true  },
+      "ex2": { "name": "Exercise 2", "questionCount": 15,  "accessForAll": true  },
+      "ex3": { "name": "Exercise 3", "questionCount": 14,  "accessForAll": true  }
+    }
   }
 }
