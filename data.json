@@ -8,6 +8,14 @@
       "emipckg": { "name": "PCKG", "questionCount": 60,  "accessForAll": true }
     }
   },
+  "ac": {
+    "name": "Alternating Current",
+    "assignments": {
+      "cpp2": { "name": "CPP 2", "questionCount": 29,  "accessForAll": false },
+      "cpp3": { "name": "CPP 3", "questionCount": 25,  "accessForAll": false },
+      "cpp4": { "name": "CPP 4", "questionCount": 29,  "accessForAll": false }
+    }
+  },
   "chemistry": {
     "name": "Chemistry",
     "assignments": {
