@@ -33,7 +33,9 @@
     "assignments": {
       "ex1": { "name": "Exercise 1", "questionCount": 13,  "accessForAll": true  },
       "ex2": { "name": "Exercise 2", "questionCount": 15,  "accessForAll": true  },
-      "ex3": { "name": "Exercise 3", "questionCount": 14,  "accessForAll": true  }
+      "ex3": { "name": "Exercise 3", "questionCount": 14,  "accessForAll": true  },
+      "solved1": { "name": "Solved pg.31-40", "questionCount": 39,  "accessForAll": true  },
+      "solved2": { "name": "Solved pg.41-47", "questionCount": 22,  "accessForAll": true  }
     }
   }
 }
