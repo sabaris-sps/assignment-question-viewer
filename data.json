@@ -35,7 +35,10 @@
       "ex2": { "name": "Exercise 2", "questionCount": 15,  "accessForAll": true  },
       "ex3": { "name": "Exercise 3", "questionCount": 14,  "accessForAll": true  },
       "solved1": { "name": "Solved pg.31-40", "questionCount": 39,  "accessForAll": true  },
-      "solved2": { "name": "Solved pg.41-47", "questionCount": 22,  "accessForAll": true  }
+      "solved2": { "name": "Solved pg.41-47", "questionCount": 22,  "accessForAll": true  },
+      "cpp": { "name": "CPP", "questionCount": 16,  "accessForAll": true  },
+      "section2": { "name": "Section II", "questionCount": 44,  "accessForAll": true  },
+      "section3": { "name": "Section III", "questionCount": 20,  "accessForAll": true  }
     }
   }
 }
