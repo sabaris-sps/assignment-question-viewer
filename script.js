@@ -43,6 +43,7 @@ const elements = {
   assignmentSelect: document.getElementById("assignmentSelect"),
   assignmentTitle: document.getElementById("assignmentTitle"),
   questionList: document.getElementById("questionList"),
+  saveNotesBtn: document.getElementById("saveNotesBtn"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
   notesArea: document.getElementById("notesArea"),
@@ -357,15 +358,16 @@ const loadQuestion = async (questionNumber) => {
 const setupEventListeners = () => {
   elements.prevButton.addEventListener("click", async () => {
     if (state.currentQuestion > 1) {
-      await saveNotes();
       await loadQuestion(state.currentQuestion - 1);
     }
   });
   elements.nextButton.addEventListener("click", async () => {
     if (state.currentQuestion < state.totalQuestions) {
-      await saveNotes();
       await loadQuestion(state.currentQuestion + 1);
     }
+  });
+  elements.saveNotesBtn.addEventListener("click", async () => {
+    await saveNotes();
   });
 
   // Keyboard navigation
@@ -389,19 +391,13 @@ const setupEventListeners = () => {
 
   elements.notesArea.addEventListener("blur", async () => {
     state.textareaHasFocus = false;
-    await saveNotes();
   });
-
-  // Auto-save notes periodically (every 30 seconds)
-  setInterval(async () => {
-    if (state.currentUser && !state.textareaHasFocus) {
-      await saveNotes();
-    }
-  }, 30000);
 };
 
 const saveNotes = async () => {
   try {
+    elements.saveNotesBtn.disabled = true;
+    elements.saveNotesBtn.innerText = "Loading...";
     if (!state.currentUser) {
       console.log("No user logged in - skipping save");
       return;
@@ -425,8 +421,12 @@ const saveNotes = async () => {
       },
       { merge: true }
     );
+    elements.saveNotesBtn.disabled = false;
+    elements.saveNotesBtn.innerText = "Save Notes";
   } catch (error) {
     console.error("Error saving notes:", error);
+    elements.saveNotesBtn.disabled = false;
+    elements.saveNotesBtn.innerText = "Save Notes";
   }
 };
 
