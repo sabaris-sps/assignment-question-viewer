@@ -25,6 +25,7 @@ const state = {
   markStatusTypes: ["done", "good", "review", "doubt", "none"],
   timerInterval: null,
   timerSeconds: 0,
+  questions: {},
 };
 
 const elements = {
@@ -101,16 +102,15 @@ const initAuth = () => {
 
 const initApp = async () => {
   createMarkButtons();
-  await loadAssignmentData();
+  await loadAssignmentData(); // get list of assignments from json
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
   state.totalQuestions =
     currentChapterData[state.currentAssignment]["questionCount"] || 1;
-  await Promise.all([loadNotes(1), loadMarkStatus(1)]);
+  // await Promise.all([loadNotes(1), loadMarkStatus(1)]);
   initDropdowns();
   await loadAssignment();
   setupEventListeners();
-  await loadQuestion(1);
 };
 
 const createMarkButtons = () => {
@@ -259,8 +259,8 @@ const loadAssignment = async () => {
       elements.questionList.appendChild(questionNumber);
     }
 
-    // Load all mark statuses at once
-    await loadAllMarkStatuses();
+    // Fetch all data of the assignment from firebase
+    await fetchAllData();
 
     // Load first question
     await loadQuestion(1);
@@ -275,7 +275,7 @@ const loadAssignment = async () => {
   }
 };
 
-const loadAllMarkStatuses = async () => {
+const fetchAllData = async () => {
   try {
     if (!state.currentUser) {
       // If no user, set all questions to 'none' status
@@ -297,6 +297,9 @@ const loadAllMarkStatuses = async () => {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       // Only process documents for current chapter and assignment
+      state.questions[
+        `${data.chapter}_${data.assignment}_${data.questionNumber}`
+      ] = data;
       if (
         data.assignment === state.currentAssignment &&
         data.chapter === state.currentChapter &&
@@ -345,15 +348,58 @@ const loadQuestion = async (questionNumber) => {
     elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
     elements.questionImage.alt = `Question ${questionNumber} image`;
 
-    // Load notes and mark status
-    await Promise.all([
-      loadNotes(questionNumber),
-      loadMarkStatus(questionNumber),
-    ]);
+    // update notes and mark buttons
+    if (
+      state.questions[
+        `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
+      ]
+    ) {
+      elements.notesArea.value =
+        state.questions[
+          `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
+        ].notes || "";
+      updateMarkButtons(
+        state.questions[
+          `${state.currentChapter}_${state.currentAssignment}_${state.currentQuestion}`
+        ].markStatus || "none"
+      );
+    } else {
+      elements.notesArea.value = "";
+      updateMarkButtons("none");
+    }
   } catch (error) {
     console.error("Error loading question:", error);
   }
 };
+
+// const loadNotes = async (questionNumber) => {
+//   try {
+//     if (!state.currentUser) {
+//       elements.notesArea.value = "";
+//       return;
+//     }
+//     const docRef = db
+//       .collection("users")
+//       .doc(state.currentUser.uid)
+//       .collection("assignments")
+//       .doc(
+//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
+//       );
+
+//     const doc = await docRef.get();
+//     if (doc.exists && doc.data().assignment === state.currentAssignment) {
+//       elements.notesArea.value = doc.data().notes || "";
+//       state.questions[
+//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
+//       ].notes = doc.data().notes || "";
+//     } else {
+//       elements.notesArea.value = "";
+//     }
+//   } catch (error) {
+//     console.error("Error loading notes:", error);
+//     elements.notesArea.value = "";
+//   }
+// };
 
 const setupEventListeners = () => {
   elements.prevButton.addEventListener("click", async () => {
@@ -403,13 +449,13 @@ const saveNotes = async () => {
       return;
     }
 
+    const docId = `${state.currentChapter}_${state.currentAssignment}_${state.currentQuestion}`;
+
     const docRef = db
       .collection("users")
       .doc(state.currentUser.uid)
       .collection("assignments")
-      .doc(
-        `${state.currentChapter}_${state.currentAssignment}_${state.currentQuestion}`
-      );
+      .doc(docId);
 
     await docRef.set(
       {
@@ -421,6 +467,20 @@ const saveNotes = async () => {
       },
       { merge: true }
     );
+
+    if (state.questions[docId]) {
+      state.questions[docId].notes = elements.notesArea.value;
+    } else {
+      state.questions[docId] = {
+        chapter: state.currentChapter,
+        assignment: state.currentAssignment,
+        questionNumber: state.currentQuestion,
+        markStatus: "none",
+        notes: elements.notesArea.value,
+        lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+    }
+
     elements.saveNotesBtn.disabled = false;
     elements.saveNotesBtn.innerText = "Save Notes";
   } catch (error) {
@@ -441,15 +501,30 @@ const saveMarkStatus = async (questionNumber, status) => {
       .doc(state.currentUser.uid)
       .collection("assignments")
       .doc(docId)
-      .set({
-        documentId: docId,
+      .set(
+        {
+          documentId: docId,
+          chapter: state.currentChapter,
+          assignment: state.currentAssignment,
+          questionNumber: questionNumber,
+          markStatus: status,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+
+    if (state.questions[docId]) {
+      state.questions[docId].markStatus = status;
+    } else {
+      state.questions[docId] = {
         chapter: state.currentChapter,
         assignment: state.currentAssignment,
-        questionNumber: questionNumber,
-        markStatus: status,
+        questionNumber: state.currentQuestion,
+        markStatus: "none",
         notes: elements.notesArea.value,
         lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+      };
+    }
 
     updateMarkButtons(status);
     updateQuestionNumberStyle(questionNumber, status);
@@ -458,63 +533,36 @@ const saveMarkStatus = async (questionNumber, status) => {
   }
 };
 
-const loadNotes = async (questionNumber) => {
-  try {
-    if (!state.currentUser) {
-      elements.notesArea.value = "";
-      return;
-    }
+// const loadMarkStatus = async (questionNumber) => {
+//   try {
+//     if (!state.currentUser) {
+//       updateMarkButtons("none");
+//       return;
+//     }
 
-    const docRef = db
-      .collection("users")
-      .doc(state.currentUser.uid)
-      .collection("assignments")
-      .doc(
-        `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-      );
+//     const docRef = db
+//       .collection("users")
+//       .doc(state.currentUser.uid)
+//       .collection("assignments")
+//       .doc(
+//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
+//       );
 
-    const doc = await docRef.get();
-    if (doc.exists && doc.data().assignment === state.currentAssignment) {
-      elements.notesArea.value = doc.data().notes || "";
-    } else {
-      elements.notesArea.value = "";
-    }
-  } catch (error) {
-    console.error("Error loading notes:", error);
-    elements.notesArea.value = "";
-  }
-};
-
-const loadMarkStatus = async (questionNumber) => {
-  try {
-    if (!state.currentUser) {
-      updateMarkButtons("none");
-      return;
-    }
-
-    const docRef = db
-      .collection("users")
-      .doc(state.currentUser.uid)
-      .collection("assignments")
-      .doc(
-        `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-      );
-
-    const doc = await docRef.get();
-    if (doc.exists && doc.data().assignment === state.currentAssignment) {
-      const status = doc.data().markStatus || "none";
-      updateMarkButtons(status);
-      updateQuestionNumberStyle(questionNumber, status);
-    } else {
-      updateMarkButtons("none");
-      updateQuestionNumberStyle(questionNumber, "none");
-    }
-  } catch (error) {
-    console.error("Error loading mark status:", error);
-    updateMarkButtons("none");
-    updateQuestionNumberStyle(questionNumber, "none");
-  }
-};
+//     const doc = await docRef.get();
+//     if (doc.exists && doc.data().assignment === state.currentAssignment) {
+//       const status = doc.data().markStatus || "none";
+//       updateMarkButtons(status);
+//       updateQuestionNumberStyle(questionNumber, status);
+//     } else {
+//       updateMarkButtons("none");
+//       updateQuestionNumberStyle(questionNumber, "none");
+//     }
+//   } catch (error) {
+//     console.error("Error loading mark status:", error);
+//     updateMarkButtons("none");
+//     updateQuestionNumberStyle(questionNumber, "none");
+//   }
+// };
 
 const updateMarkButtons = (status) => {
   state.markStatusTypes.forEach((type) => {

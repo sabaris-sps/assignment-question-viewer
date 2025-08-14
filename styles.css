@@ -1,401 +1,558 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  background-color: #f5f5f5;
+/* Modernized styles for Questions Viewer
+   - Uses CSS variables for easy theme tweaks
+   - Refreshed sidebar, cards, buttons, badges and modal
+   - Keeps all original class names so JS behavior remains compatible
+*/
+:root {
+  --bg-0: #0f1720;
+  /* deep background for subtle contrast */
+  --bg-1: linear-gradient(180deg, #0b1220 0%, #0f1728 60%);
+  --surface: #0b1220;
+  --card: rgba(255, 255, 255, 0.03);
+  --muted: #98a0ad;
+  --accent: #3ddc97;
+  /* green accent */
+  --accent-2: #5cc1ff;
+  /* blue accent */
+  --danger: #ff6b6b;
+  --glass: rgba(255, 255, 255, 0.04);
+  --radius: 12px;
+  --sidebar-w: 220px;
+  --shadow-1: 0 6px 18px rgba(2, 6, 23, 0.6);
+  --glass-blur: 10px;
+  --max-width: 1100px;
 }
 
+/* Page layout */
+* {
+  box-sizing: border-box
+}
+
+html,
+body {
+  height: 100%
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #e6eef6;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(93, 138, 255, 0.06), transparent),
+    linear-gradient(180deg, #071126 0%, #071221 50%);
+  display: flex;
+}
+
+/* Sidebar */
 .sidebar {
-  width: 200px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px;
+  width: var(--sidebar-w);
   height: 100vh;
-  overflow-y: auto;
   position: fixed;
+  left: 0;
+  top: 0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-1);
 }
 
 .sidebar h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--accent-2);
   text-align: center;
-  margin-bottom: 20px;
+  letter-spacing: 0.6px;
+}
+
+/* compact header / logo area */
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.sidebar .logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover
 }
 
 .question-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 50px;
+  grid-template-columns: repeat(3, minmax(44px, 1fr));
+  gap: 12px;
+  padding: 6px 4px 20px 4px;
+  overflow: auto;
+  margin-top: 6px;
 }
 
 .question-number {
-  background-color: #3498db;
-  color: white;
-  padding: 8px;
-  text-align: center;
-  border-radius: 4px;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #14293a, #0f2434);
+  color: var(--accent-2);
+  font-weight: 600;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
   position: relative;
+  box-shadow: 0 6px 12px rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .question-number:hover {
-  background-color: #2980b9;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 22px rgba(2, 6, 23, 0.6)
 }
 
 .question-number.active {
-  background-color: #e74c3c;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #042017;
+  box-shadow: 0 10px 30px rgba(45, 220, 150, 0.18), inset 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Badges for marked states - tuned for new palette */
 .question-number.marked-done::after {
-  content: "✓";
+  content: "\2713";
+  /* check */
   position: absolute;
-  top: -10px;
-  right: -5px;
-  color: #bef312;
-  font-size: 17px;
-  font-weight: lighter;
-  text-shadow: -1px 1px 3px rgb(0 0 0);
+  right: -6px;
+  top: -8px;
+  background: #022f1d;
+  color: var(--accent);
+  font-size: 12px;
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(2, 6, 23, 0.5);
 }
 
 .question-number.marked-review::after {
-  content: "⋆";
+  content: "\2605";
+  /* star */
   position: absolute;
-  top: -12px;
-  right: -5px;
-  color: #f1c40f;
-  font-size: 23px;
-  font-weight: bold;
-  text-shadow: -1px 1px 3px rgb(0 0 0);
+  right: -6px;
+  top: -10px;
+  background: #3b2c12;
+  color: #ffdf7b;
+  font-size: 13px;
+  padding: 4px;
+  border-radius: 8px;
 }
 
 .question-number.marked-doubt::after {
-  content: "‼ ";
+  content: "!";
   position: absolute;
-  top: -6px;
-  right: -2px;
-  color: #ff5722;
-  font-size: 18px;
-  font-weight: bold;
-  text-shadow: -1px 1px 3px rgb(0 0 0);
+  right: -6px;
+  top: -8px;
+  background: #3a0f00;
+  color: #fff4e6;
+  font-size: 12px;
+  padding: 3px;
+  border-radius: 8px;
 }
 
 .question-number.marked-good::after {
-  content: "Օ";
+  content: "\25CB";
+  /* open circle */
   position: absolute;
-  top: -10px;
-  right: -5px;
-  color: #e199ff;
-  font-size: 17px;
-  font-weight: lighter;
-  text-shadow: -1px 1px 3px rgb(0 0 0);
-}
-
-.main-content {
-  margin-left: 240px;
-  padding: 20px;
-  flex-grow: 1;
-}
-
-.question-container {
-  background-color: white;
+  right: -6px;
+  top: -8px;
+  background: #2b0538;
+  color: #f1d6ff;
+  font-size: 12px;
+  padding: 3px;
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.question-image {
-  max-width: 100%;
-  margin: 15px 0;
-  border: 1px solid #ddd;
-}
-
-.notes-area {
-  width: calc(100% - 20px);
-  min-height: 100px;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-family: Arial, sans-serif;
-}
-
-#saveNotesBtn {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #9f5808;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#saveNotesBtn:hover {
-  background-color: #894b06;
-}
-
-#saveNotesBtn:disabled {
-  background-color: #9f5908a9;
-  cursor: not-allowed;
-}
-
-.navigation {
+/* Main content area */
+.main-content {
+  margin-left: calc(var(--sidebar-w) + 24px);
+  padding: 28px;
+  width: calc(100% - var(--sidebar-w) - 24px);
   display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.nav-button {
-  padding: 10px 20px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.nav-button:hover {
-  background-color: #2980b9;
-}
-
-.nav-button:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
-}
-
-.mark-options {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
   justify-content: center;
 }
 
-.mark-button {
-  padding: 8px 15px;
-  color: white;
+/* Center column */
+.question-container {
+  width: 100%;
+  max-width: var(--max-width);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between
+}
+
+#currentQuestion {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #dff7ea
+}
+
+#questionTimer {
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  color: #01211a;
+  box-shadow: 0 6px 20px rgba(55, 170, 255, 0.08);
+}
+
+#questionContent {
+  margin-top: 14px
+}
+
+.question-image {
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+}
+
+/* Notes area */
+.notes-container {
+  display: block;
+  margin-top: 18px
+}
+
+.notes-container h3 {
+  color: #cfeede;
+  margin: 0
+}
+
+.notes-area {
+  width: 100%;
+  min-height: 120px;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #d7eef0;
+  resize: vertical;
+  font-size: 0.95rem;
+  line-height: 1.45
+}
+
+#saveNotesBtn {
+  margin-top: 12px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), #16b0ff);
   border: none;
-  border-radius: 4px;
+  color: #02211a;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 14px;
+  box-shadow: 0 8px 20px rgba(30, 180, 140, 0.12)
+}
+
+#saveNotesBtn:hover {
+  transform: translateY(-2px)
+}
+
+#saveNotesBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px
+}
+
+.nav-button {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #cfeede;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .14s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px
+}
+
+.nav-button:hover {
+  transform: translateY(-3px);
+  color: #fff
+}
+
+.nav-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none
+}
+
+/* Mark buttons */
+.mark-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px
+}
+
+.mark-button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease
+}
+
+.mark-button:active {
+  transform: translateY(1px)
 }
 
 .mark-button.done {
-  background-color: #27ae60;
-}
-
-.mark-button.done:hover {
-  background-color: #2ecc71;
-}
-
-.mark-button.done.active {
-  background-color: #16a085;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #27ae60;
+  background: linear-gradient(90deg, #34d399, #059669);
+  box-shadow: 0 8px 22px rgba(12, 140, 100, 0.12)
 }
 
 .mark-button.review {
-  background-color: #f39c12;
+  background: linear-gradient(90deg, #fbbf24, #f97316);
+  box-shadow: 0 8px 22px rgba(250, 160, 45, 0.12)
 }
-
-.mark-button.review:hover {
-  background-color: #f1c40f;
-}
-
-.mark-button.review.active {
-  background-color: #e67e22;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #f39c12;
-}
-
 
 .mark-button.doubt {
-  background-color: #ff6f00;
+  background: linear-gradient(90deg, #fb923c, #ef4444);
+  box-shadow: 0 8px 22px rgba(235, 80, 60, 0.12)
 }
-
-.mark-button.doubt:hover {
-  background-color: #ff6f00e2;
-}
-
-.mark-button.doubt.active {
-  background-color: #e66022;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #f39c12;
-}
-
 
 .mark-button.good {
-  background-color: #9b59b6;
-}
-
-.mark-button.good:hover {
-  background-color: #8e44ad;
-}
-
-.mark-button.good.active {
-  background-color: #7d3c98;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #9b59b6;
+  background: linear-gradient(90deg, #a78bfa, #7c3aed);
+  box-shadow: 0 8px 22px rgba(120, 70, 200, 0.12)
 }
 
 .mark-button.none {
-  background-color: #95a5a6;
+  background: linear-gradient(90deg, #94a3b8, #64748b);
+  box-shadow: 0 8px 22px rgba(80, 100, 140, 0.08)
 }
 
-.mark-button.none:hover {
-  background-color: #bdc3c7;
+.mark-button.active {
+  outline: 3px solid rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px)
 }
 
-.mark-button.none.active {
-  background-color: #7f8c8d;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #95a5a6;
-}
-
+/* Assignment selector */
 .assignment-selector {
   margin-bottom: 20px;
-  padding: 15px;
-  background-color: #eaf2f8;
-  border-radius: 4px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+  border-radius: 12px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: center;
+  gap: 18px;
+  align-items: center
 }
 
 .dropdown-container {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: center
+}
+
+label {
+  font-weight: 700;
+  color: var(--muted)
 }
 
 select {
   padding: 8px 12px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  min-width: 120px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e9f7f0
 }
 
 .assignment-title {
-  font-weight: bold;
+  font-weight: 700;
   margin-left: auto;
-  background-color: #2c3e50;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  color: #02211a;
+  padding: 8px 14px;
+  border-radius: 10px
 }
 
-label {
-  font-weight: bold;
-}
-
-/* Add new styles for auth UI */
+/* Auth modal */
 .auth-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.6), rgba(2, 6, 23, 0.75));
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 1000
 }
 
 .auth-box {
-  background-color: white;
-  padding: 30px;
-  border-radius: 8px;
-  width: 350px;
-  max-width: 90%;
+  width: 380px;
+  padding: 28px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.03)
 }
 
 .auth-title {
+  font-size: 1.25rem;
+  color: #dff7ea;
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
+  margin-bottom: 8px
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px
 }
 
 .auth-input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8fbf0
 }
 
 .auth-button {
-  padding: 10px;
-  background-color: #3498db;
-  color: white;
+  padding: 12px;
+  border-radius: 10px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #02211a;
+  font-weight: 800;
+  cursor: pointer
 }
 
 .auth-button:hover {
-  background-color: #2980b9;
+  transform: translateY(-2px)
 }
 
 .auth-switch {
+  color: var(--accent-2);
   text-align: center;
-  margin-top: 15px;
-  color: #3498db;
-  cursor: pointer;
-  text-decoration: underline;
+  cursor: pointer
 }
 
 .auth-error {
-  color: #e74c3c;
-  text-align: center;
-  margin-top: 10px;
+  color: #ff8b8b;
+  text-align: center
 }
 
+/* User info */
 .user-info {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  position: fixed;
+  right: 20px;
+  top: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: #cfeede;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 800
 }
 
 .logout-button {
   background: none;
   border: none;
-  color: #f39c12;
+  color: var(--accent-2);
   cursor: pointer;
-  margin-left: 5px;
+  font-weight: 700
 }
 
-.question-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  position: relative;
+/* Responsive adjustments */
+@media (max-width:900px) {
+  :root {
+    --sidebar-w: 72px
+  }
+
+  .sidebar {
+    width: 72px;
+    padding: 14px
+  }
+
+  .sidebar h2 {
+    display: none
+  }
+
+  .question-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px
+  }
+
+  .main-content {
+    margin-left: calc(var(--sidebar-w) + 18px);
+    padding: 18px
+  }
+
+  .assignment-title {
+    display: none
+  }
 }
 
-#currentQuestion {
-  margin: 0;
-  flex: 1;
+@media (max-width:560px) {
+  .sidebar {
+    display: none
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 12px
+  }
+
+  .question-container {
+    padding: 16px;
+    border-radius: 10px
+  }
+
+  #questionTimer {
+    position: static;
+    transform: none;
+    margin-left: 0
+  }
 }
 
-#questionTimer {
-  text-align: center;
-  margin: 10px 0;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  color: #2c3e50;
-  background-color: #3498db84;
-  font-weight: bold;
-  padding: 5px 10px 5px 10px;
-  border-radius: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 1
+/* small helpful tweaks */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px
 }
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+  border-radius: 10px
+}
+
+/* end of stylesheet */
