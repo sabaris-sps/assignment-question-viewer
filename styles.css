@@ -42,6 +42,10 @@ body {
   background: radial-gradient(1200px 600px at 10% 10%, rgba(93, 138, 255, 0.06), transparent),
     linear-gradient(180deg, #071126 0%, #071221 50%);
   display: flex;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center top;
 }
 
 /* Sidebar */
@@ -51,7 +55,7 @@ body {
   position: fixed;
   left: 0;
   top: 0;
-  padding: 22px;
+  padding: 20px 8px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -88,7 +92,8 @@ body {
   display: grid;
   grid-template-columns: repeat(3, minmax(44px, 1fr));
   gap: 12px;
-  padding: 6px 4px 20px 4px;
+  /* increase top padding so animated upward movement of items stays inside the list box */
+  padding: 16px 4px 20px 4px;
   overflow: auto;
   margin-top: 6px;
 }
@@ -108,6 +113,9 @@ body {
   position: relative;
   box-shadow: 0 6px 12px rgba(2, 6, 23, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.03);
+  will-change: transform;
+  z-index: 2;
+  /* ensure it can appear above nearby elements when translating */
 }
 
 .question-number:hover {
@@ -176,11 +184,13 @@ body {
 
 /* Main content area */
 .main-content {
-  margin-left: calc(var(--sidebar-w) + 24px);
-  padding: 28px;
+  margin-left: var(--sidebar-w);
+  padding: 10px;
   width: calc(100% - var(--sidebar-w) - 24px);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* stack children vertically */
+  align-items: center;
 }
 
 /* Center column */
@@ -226,7 +236,7 @@ body {
   object-fit: contain;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+  box-shadow: 0 12px 40px rgba(90, 104, 164, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.04);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
 }
@@ -358,25 +368,33 @@ body {
 }
 
 .mark-button.active {
-  outline: 3px solid rgba(255, 255, 255, 0.03);
-  transform: translateY(-2px)
+  outline: 3px solid rgba(255, 255, 255);
 }
 
 /* Assignment selector */
 .assignment-selector {
-  margin-bottom: 20px;
-  padding: 12px;
+  margin-bottom: 5px;
+  padding: 10px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
   border-radius: 12px;
   display: flex;
   gap: 18px;
-  align-items: center
+  align-items: center;
+  flex-wrap: wrap;
+  /* allow children to wrap to new lines */
+
+  /* make selector take same centered column width as the question container */
+  width: 100%;
+  max-width: var(--max-width);
+  box-sizing: border-box;
 }
 
 .dropdown-container {
   display: flex;
   gap: 10px;
-  align-items: center
+  align-items: center;
+  /* allow dropdowns to grow/shrink and keep minimum width */
+  min-width: 200px;
 }
 
 label {
@@ -384,21 +402,62 @@ label {
   color: var(--muted)
 }
 
+/* Ensure native dropdown options are readable on dark theme */
 select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.03);
-  background: rgba(255, 255, 255, 0.02);
-  color: #e9f7f0
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  color: #e9f7f0;
+  min-width: 120px;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 6px 18px rgba(5, 110, 180, 0.12);
+  border-color: rgba(92, 193, 255, 0.6);
+}
+
+/* Style native option colors (most modern browsers respect this) */
+select option,
+select optgroup {
+  background-color: #071221;
+  color: #e9f7f0;
+}
+
+/* Improve appearance on Windows/Edge */
+select::-ms-expand {
+  filter: invert(1) brightness(1.2);
+}
+
+/* Ensure autofill keeps dark background */
+select:-webkit-autofill {
+  background-color: #071221 !important;
+  color: #e9f7f0 !important;
 }
 
 .assignment-title {
   font-weight: 700;
-  margin-left: auto;
+  /* place title on its own row by default so dropdowns are grouped above */
+  flex: 0 0 100%;
+  margin-left: 0;
   background: linear-gradient(90deg, var(--accent-2), var(--accent));
   color: #02211a;
   padding: 8px 14px;
-  border-radius: 10px
+  border-radius: 10px;
+  text-align: right;
+}
+
+/* On wide screens keep the title aligned to the right on the same row */
+@media (min-width: 1100px) {
+  .assignment-title {
+    flex: 0 0 auto;
+    margin-left: auto;
+    text-align: right;
+  }
 }
 
 /* Auth modal */
@@ -469,7 +528,7 @@ select {
 
 /* User info */
 .user-info {
-  position: fixed;
+  position: absolute;
   right: 20px;
   top: 18px;
   background: rgba(255, 255, 255, 0.02);
@@ -489,6 +548,42 @@ select {
   color: var(--accent-2);
   cursor: pointer;
   font-weight: 700
+}
+
+/* Custom scrollbars (Chromium / WebKit browsers) */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(92, 193, 255, 0.18), rgba(61, 220, 151, 0.12));
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(92, 193, 255, 0.30), rgba(61, 220, 151, 0.22));
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(92, 193, 255, 0.26) rgba(255, 255, 255, 0.02);
+}
+
+/* Specific narrower scrollbar for small scrollable panes (question list) */
+.question-list::-webkit-scrollbar {
+  width: 10px
+}
+
+.question-list::-webkit-scrollbar-thumb {
+  opacity: 0.95
 }
 
 /* Responsive adjustments */

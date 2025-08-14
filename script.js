@@ -42,7 +42,6 @@ const elements = {
   logoutButton: document.getElementById("logoutButton"),
   chapterSelect: document.getElementById("chapterSelect"),
   assignmentSelect: document.getElementById("assignmentSelect"),
-  assignmentTitle: document.getElementById("assignmentTitle"),
   questionList: document.getElementById("questionList"),
   saveNotesBtn: document.getElementById("saveNotesBtn"),
   prevButton: document.getElementById("prevButton"),
@@ -242,12 +241,6 @@ const loadAssignment = async () => {
   try {
     // Reset UI
     elements.questionList.innerHTML = "";
-    assignTitle =
-      assignmentData[state.currentChapter].assignments[state.currentAssignment]
-        .name || "";
-    elements.assignmentTitle.textContent = `${assignmentData[
-      state.currentChapter
-    ].name.toUpperCase()} - ${assignTitle.toUpperCase()}`;
 
     // Create question list
     for (let i = 1; i <= state.totalQuestions; i++) {
@@ -639,7 +632,6 @@ const resetUI = () => {
 
   elements.questionList.innerHTML = "";
   elements.currentQuestionDisplay.textContent = "Select an assignment to begin";
-  elements.assignmentTitle.textContent = "Select an assignment";
   elements.questionImage.style.display = "none";
   document.querySelector(".notes-container").style.display = "none";
   document.querySelector(".navigation").style.display = "none";
