@@ -340,6 +340,27 @@ const loadQuestion = async (questionNumber) => {
     // Load question image
     elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
     elements.questionImage.alt = `Question ${questionNumber} image`;
+    // show loader while image downloads
+    const imageLoader = document.getElementById('imageLoader');
+    if (imageLoader) { imageLoader.style.display = 'flex'; }
+    elements.questionImage.style.display = 'none';
+    elements.questionImage.classList.remove('visible');
+
+    // Preload image then show
+    const img = new Image();
+    img.src = elements.questionImage.src;
+    img.onload = () => {
+      if (imageLoader) { imageLoader.style.display = 'none'; }
+      elements.questionImage.src = img.src;
+      elements.questionImage.style.display = 'block';
+      // small timeout so CSS transition triggers reliably
+      requestAnimationFrame(() => { elements.questionImage.classList.add('visible'); });
+    };
+    img.onerror = () => {
+      if (imageLoader) { imageLoader.style.display = 'none'; }
+      elements.questionImage.style.display = 'none';
+      console.error('Failed to load image:', img.src);
+    };
 
     // update notes and mark buttons
     if (
