@@ -46,7 +46,8 @@
       "solved2": { "name": "Solved pg.41-47", "questionCount": 22,  "accessForAll": true  },
       "cpp": { "name": "CPP", "questionCount": 16,  "accessForAll": true  },
       "section2": { "name": "Section II", "questionCount": 44,  "accessForAll": true  },
-      "section3": { "name": "Section III", "questionCount": 20,  "accessForAll": true  }
+      "section3": { "name": "Section III", "questionCount": 20,  "accessForAll": true  },
+      "assignment": {"name": "Worksheet*", "questionCount": 51, "accessForAll": true}
     }
   }
 }

@@ -341,25 +341,33 @@ const loadQuestion = async (questionNumber) => {
     elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
     elements.questionImage.alt = `Question ${questionNumber} image`;
     // show loader while image downloads
-    const imageLoader = document.getElementById('imageLoader');
-    if (imageLoader) { imageLoader.style.display = 'flex'; }
-    elements.questionImage.style.display = 'none';
-    elements.questionImage.classList.remove('visible');
+    const imageLoader = document.getElementById("imageLoader");
+    if (imageLoader) {
+      imageLoader.style.display = "flex";
+    }
+    elements.questionImage.style.display = "none";
+    elements.questionImage.classList.remove("visible");
 
     // Preload image then show
     const img = new Image();
     img.src = elements.questionImage.src;
     img.onload = () => {
-      if (imageLoader) { imageLoader.style.display = 'none'; }
+      if (imageLoader) {
+        imageLoader.style.display = "none";
+      }
       elements.questionImage.src = img.src;
-      elements.questionImage.style.display = 'block';
+      elements.questionImage.style.display = "block";
       // small timeout so CSS transition triggers reliably
-      requestAnimationFrame(() => { elements.questionImage.classList.add('visible'); });
+      requestAnimationFrame(() => {
+        elements.questionImage.classList.add("visible");
+      });
     };
     img.onerror = () => {
-      if (imageLoader) { imageLoader.style.display = 'none'; }
-      elements.questionImage.style.display = 'none';
-      console.error('Failed to load image:', img.src);
+      if (imageLoader) {
+        imageLoader.style.display = "none";
+      }
+      elements.questionImage.style.display = "none";
+      console.error("Failed to load image:", img.src);
     };
 
     // update notes and mark buttons
@@ -385,35 +393,6 @@ const loadQuestion = async (questionNumber) => {
     console.error("Error loading question:", error);
   }
 };
-
-// const loadNotes = async (questionNumber) => {
-//   try {
-//     if (!state.currentUser) {
-//       elements.notesArea.value = "";
-//       return;
-//     }
-//     const docRef = db
-//       .collection("users")
-//       .doc(state.currentUser.uid)
-//       .collection("assignments")
-//       .doc(
-//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-//       );
-
-//     const doc = await docRef.get();
-//     if (doc.exists && doc.data().assignment === state.currentAssignment) {
-//       elements.notesArea.value = doc.data().notes || "";
-//       state.questions[
-//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-//       ].notes = doc.data().notes || "";
-//     } else {
-//       elements.notesArea.value = "";
-//     }
-//   } catch (error) {
-//     console.error("Error loading notes:", error);
-//     elements.notesArea.value = "";
-//   }
-// };
 
 const setupEventListeners = () => {
   elements.prevButton.addEventListener("click", async () => {
@@ -546,37 +525,6 @@ const saveMarkStatus = async (questionNumber, status) => {
     console.error("Error saving mark status:", error);
   }
 };
-
-// const loadMarkStatus = async (questionNumber) => {
-//   try {
-//     if (!state.currentUser) {
-//       updateMarkButtons("none");
-//       return;
-//     }
-
-//     const docRef = db
-//       .collection("users")
-//       .doc(state.currentUser.uid)
-//       .collection("assignments")
-//       .doc(
-//         `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-//       );
-
-//     const doc = await docRef.get();
-//     if (doc.exists && doc.data().assignment === state.currentAssignment) {
-//       const status = doc.data().markStatus || "none";
-//       updateMarkButtons(status);
-//       updateQuestionNumberStyle(questionNumber, status);
-//     } else {
-//       updateMarkButtons("none");
-//       updateQuestionNumberStyle(questionNumber, "none");
-//     }
-//   } catch (error) {
-//     console.error("Error loading mark status:", error);
-//     updateMarkButtons("none");
-//     updateQuestionNumberStyle(questionNumber, "none");
-//   }
-// };
 
 const updateMarkButtons = (status) => {
   state.markStatusTypes.forEach((type) => {
