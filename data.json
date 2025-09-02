@@ -16,7 +16,7 @@
       "cpp4": { "name": "CPP 4", "questionCount": 29,  "accessForAll": false }
     }
   },
-  "rayoptidcs": {
+  "rayoptics": {
     "name": "Ray Optics",
     "assignments": {
       "rayoptics-cpp1": { "name": "CPP 1", "questionCount": 72,  "accessForAll": false }
