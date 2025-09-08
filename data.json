@@ -30,6 +30,12 @@
       "solidstate": { "name": "Solid State", "questionCount": 51,   "accessForAll": true  }
     }
   },
+  "surface_chemistry": {
+    "name": "Surface Chemistry",
+    "assignments": {
+      "surface_assignment_1": { "name": "Assignment 1", "questionCount": 236, "accessForAll": true  }
+    }
+  },
   "maths": {
     "name": "Maths",
     "assignments": {

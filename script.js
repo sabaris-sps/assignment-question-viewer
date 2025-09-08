@@ -426,6 +426,8 @@ const setupEventListeners = () => {
         state.currentQuestion < state.totalQuestions
       ) {
         await loadQuestion(state.currentQuestion + 1);
+      } else if (e.shiftKey && e.key == "Q") {
+        toggleLastQuestion();
       }
     }
   });
@@ -439,7 +441,6 @@ const setupEventListeners = () => {
     state.textareaHasFocus = false;
   });
 
-  console.log(elements.loadLastQuestionButton);
   // Load last question button
   elements.loadLastQuestionButton.addEventListener("click", () => {
     toggleLastQuestion();
