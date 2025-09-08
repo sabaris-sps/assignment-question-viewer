@@ -325,6 +325,7 @@ const fetchAllData = async () => {
 
 const loadQuestion = async (questionNumber) => {
   try {
+    state.viewingCurrentQuestion = true;
     state.currentQuestion = questionNumber;
     startQuestionTimer();
 

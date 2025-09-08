@@ -246,8 +246,22 @@ body {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
   filter: brightness(0.8) contrast(1);
   box-shadow: 0 12px 40px rgba(90, 104, 164, 0.6);
+  animation: scale 125ms ease-in-out;
 }
 
+@keyframes scale {
+  from {
+    filter: brightness(0.5);
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(0.8);
+  }
+}
 
 /* Image loader styles */
 .image-loader {
