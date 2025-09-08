@@ -326,6 +326,7 @@ const fetchAllData = async () => {
 const loadQuestion = async (questionNumber) => {
   try {
     state.viewingCurrentQuestion = true;
+    elements.loadLastQuestionButton.innerText = "Load Answer Key";
     state.currentQuestion = questionNumber;
     startQuestionTimer();
 
@@ -427,17 +428,17 @@ const setupEventListeners = () => {
         state.currentQuestion < state.totalQuestions
       ) {
         await loadQuestion(state.currentQuestion + 1);
-      } else if (e.shiftKey) {
-        if (e.key == "Q") {
+      } else if (e.altKey) {
+        if (e.key == "q") {
           toggleLastQuestion();
-        }
-      } else if (e.altKey && e.key.match(/^[0-9]+$/) != null) {
-        index = parseInt(e.key);
-        if (index >= 1 && index <= state.markStatusTypes.length) {
-          await saveMarkStatus(
-            state.currentQuestion,
-            state.markStatusTypes[index - 1]
-          );
+        } else if (e.key.match(/^[0-9]+$/) != null) {
+          index = parseInt(e.key);
+          if (index >= 1 && index <= state.markStatusTypes.length) {
+            await saveMarkStatus(
+              state.currentQuestion,
+              state.markStatusTypes[index - 1]
+            );
+          }
         }
       }
     }
@@ -496,7 +497,12 @@ const toggleLastQuestion = () => {
     elements.questionImage.style.display = "none";
     console.error("Failed to load image:", img.src);
   };
+
   state.viewingCurrentQuestion = !state.viewingCurrentQuestion;
+  elements.loadLastQuestionButton.innerText = "Load Current Question";
+  if (state.viewingCurrentQuestion) {
+    elements.loadLastQuestionButton.innerText = "Load Answer Key";
+  }
 };
 
 const saveNotes = async () => {
