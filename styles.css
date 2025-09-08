@@ -26,6 +26,9 @@
   --review: #e17100;
   --doubt: #f54900;
   --none: grey;
+  --ui-color-success-600: #00a63e;
+  --ui-color-yellow-500: #f0b100;
+  --ui-color-gray-300: #6a7282;
 }
 
 /* Page layout */
@@ -129,63 +132,47 @@ body {
   box-shadow: 0 12px 22px rgba(2, 6, 23, 0.6)
 }
 
-.question-number.active {
+/* .question-number.active {
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #042017;
   box-shadow: 0 10px 30px rgba(45, 220, 150, 0.18), inset 0 -4px 12px rgba(0, 0, 0, 0.08);
+} */
+
+.question-number.active {
+  background: color-mix(in oklab, var(--ui-color-gray-300) 10%, transparent) !important;
+  color: var(--ui-color-gray-300);
+  border-color: var(--ui-color-gray-300);
+  border-width: 1px;
 }
 
 /* Badges for marked states - tuned for new palette */
-.question-number.marked-done::after {
-  content: "\2713";
-  /* check */
-  position: absolute;
-  right: -6px;
-  top: -8px;
-  background: #022f1d;
-  color: var(--accent);
-  font-size: 12px;
-  padding: 3px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(2, 6, 23, 0.5);
+
+.question-number.marked-done {
+  background: color-mix(in oklab, var(--ui-color-success-600) 20%, transparent);
+  color: var(--ui-color-success-600);
+  border-color: currentColor;
+  border-width: 1px;
 }
 
-.question-number.marked-review::after {
-  content: "\2605";
-  /* star */
-  position: absolute;
-  right: -6px;
-  top: -10px;
-  background: #3b2c12;
-  color: #ffdf7b;
-  font-size: 13px;
-  padding: 4px;
-  border-radius: 8px;
+.question-number.marked-review {
+  background: color-mix(in oklab, var(--ui-color-yellow-500) 20%, transparent);
+  color: var(--ui-color-yellow-500);
+  border-color: currentColor;
+  border-width: 1px;
 }
 
-.question-number.marked-doubt::after {
-  content: "!";
-  position: absolute;
-  right: -6px;
-  top: -8px;
-  background: #3a0f00;
-  color: #fff4e6;
-  font-size: 12px;
-  padding: 3px;
-  border-radius: 8px;
+.question-number.marked-good {
+  background: color-mix(in oklab, var(--good) 20%, transparent);
+  color: var(--good);
+  border-color: currentColor;
+  border-width: 1px;
 }
 
-.question-number.marked-good::after {
-  content: "\25CB";
-  /* open circle */
-  position: absolute;
-  right: -6px;
-  top: -8px;
-  background: #2b0538;
-  color: #f1d6ff;
-  font-size: 12px;
-  padding: 3px;
-  border-radius: 8px;
+.question-number.marked-doubt {
+  background: color-mix(in oklab, var(--doubt) 20%, transparent);
+  color: var(--doubt);
+  border-color: currentColor;
+  border-width: 1px;
 }
 
 /* Main content area */
