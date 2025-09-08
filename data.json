@@ -19,7 +19,8 @@
   "rayoptics": {
     "name": "Ray Optics",
     "assignments": {
-      "rayoptics-cpp1": { "name": "CPP 1", "questionCount": 72,  "accessForAll": false }
+      "rayoptics-cpp1": { "name": "CPP 1", "questionCount": 72,  "accessForAll": false },
+      "rayoptics-cpp2": { "name": "CPP 2", "questionCount": 41,  "accessForAll": false }
     }
   },
   "chemistry": {
