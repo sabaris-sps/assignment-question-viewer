@@ -21,6 +21,11 @@
   --shadow-1: 0 6px 18px rgba(2, 6, 23, 0.6);
   --glass-blur: 10px;
   --max-width: 1100px;
+  --done: #05df72;
+  --good: #7008e7;
+  --review: #e17100;
+  --doubt: #f54900;
+  --none: grey;
 }
 
 /* Page layout */
@@ -375,50 +380,25 @@ body {
 }
 
 .mark-button {
-  padding: 10px 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 32px;
+  width: 80px;
   border-radius: 5px;
   border: none;
   color: black;
   font-weight: 700;
   cursor: pointer;
-  transition: opacity .12s ease, box-shadow .12s ease
+  /* transition: transform .12s ease, box-shadow .12s ease; */
 }
 
 .mark-button:hover {
-  opacity: 0.95;
+  transform: scale(0.95);
+
 }
 
 .mark-button:active {
-  opacity: 0.85;
-}
-
-.mark-button.done {
-  background: linear-gradient(90deg, #34d399, #059669);
-  box-shadow: 0 8px 22px rgba(12, 140, 100, 0.12)
-}
-
-.mark-button.review {
-  background: linear-gradient(90deg, #b3fb24, #f9cf16);
-  box-shadow: 0 8px 22px rgba(250, 160, 45, 0.12)
-}
-
-.mark-button.doubt {
-  background: linear-gradient(90deg, #fb923c, #ef4444);
-  box-shadow: 0 8px 22px rgba(235, 80, 60, 0.12)
-}
-
-.mark-button.good {
-  background: linear-gradient(90deg, #a78bfa, #7c3aed);
-  box-shadow: 0 8px 22px rgba(120, 70, 200, 0.12)
-}
-
-.mark-button.none {
-  background: linear-gradient(90deg, #94a3b8, #64748b);
-  box-shadow: 0 8px 22px rgba(80, 100, 140, 0.08)
-}
-
-.mark-button.active {
-  outline: 2px solid rgb(200, 250, 255);
+  transform: scale(1);
 }
 
 /* Assignment selector */

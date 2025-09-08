@@ -128,6 +128,13 @@ const createMarkButtons = () => {
       await saveMarkStatus(state.currentQuestion, status);
     });
 
+    button.style = `
+    background: color-mix(in oklab, var(--${status}) 10%, transparent);
+    color: var(--${status});
+    border: 1px solid var(--${status});`;
+
+    console.log(button.style);
+
     elements.markOptions.appendChild(button);
   });
 
@@ -532,6 +539,17 @@ const updateMarkButtons = (status) => {
       elements[`mark${type.charAt(0).toUpperCase() + type.slice(1)}Button`];
     if (button) {
       button.classList.toggle("active", status === type);
+      if (status === type) {
+        button.style = `
+          background: color-mix(in oklab, var(--${type}) 80%, transparent);
+          color: var(--bg-0);
+          border: 1px solid var(--${type});`;
+      } else {
+        button.style = `
+          background: color-mix(in oklab, var(--${type}) 10%, transparent);
+          color: var(--${type});
+          border: 1px solid var(--${type});`;
+      }
     }
   });
 };
