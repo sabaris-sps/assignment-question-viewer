@@ -427,8 +427,18 @@ const setupEventListeners = () => {
         state.currentQuestion < state.totalQuestions
       ) {
         await loadQuestion(state.currentQuestion + 1);
-      } else if (e.shiftKey && e.key == "Q") {
-        toggleLastQuestion();
+      } else if (e.shiftKey) {
+        if (e.key == "Q") {
+          toggleLastQuestion();
+        }
+      } else if (e.altKey && e.key.match(/^[0-9]+$/) != null) {
+        index = parseInt(e.key);
+        if (index >= 1 && index <= state.markStatusTypes.length) {
+          await saveMarkStatus(
+            state.currentQuestion,
+            state.markStatusTypes[index - 1]
+          );
+        }
       }
     }
   });
