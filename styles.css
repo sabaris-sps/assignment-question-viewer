@@ -371,6 +371,25 @@ body {
   transform: none
 }
 
+#loadLastQuestionBtn {
+  width: 150px;
+  height: 32px;
+  background: color-mix(in oklab, var(--accent-2) 10%, transparent);
+  color: var(--accent-2);
+  border-radius: 5px;
+  border: 2px solid var(--accent-2);
+}
+
+#loadLastQuestionBtn:hover {
+  transform: scale(0.95);
+  background: color-mix(in oklab, var(--accent-2) 20%, transparent);
+}
+
+#loadLastQuestionBtn:active {
+  transform: scale(1);
+  background: color-mix(in oklab, var(--accent-2) 20%, transparent);
+}
+
 /* Mark buttons */
 .mark-options {
   display: flex;

@@ -26,6 +26,7 @@ const state = {
   timerInterval: null,
   timerSeconds: 0,
   questions: {},
+  viewingCurrentQuestion: true,
 };
 
 const elements = {
@@ -46,6 +47,7 @@ const elements = {
   saveNotesBtn: document.getElementById("saveNotesBtn"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
+  loadLastQuestionButton: document.getElementById("loadLastQuestionBtn"),
   notesArea: document.getElementById("notesArea"),
   questionImage: document.getElementById("questionImage"),
   currentQuestionDisplay: document.getElementById("currentQuestion"),
@@ -132,8 +134,6 @@ const createMarkButtons = () => {
     background: color-mix(in oklab, var(--${status}) 10%, transparent);
     color: var(--${status});
     border: 1px solid var(--${status});`;
-
-    console.log(button.style);
 
     elements.markOptions.appendChild(button);
   });
@@ -438,6 +438,53 @@ const setupEventListeners = () => {
   elements.notesArea.addEventListener("blur", async () => {
     state.textareaHasFocus = false;
   });
+
+  console.log(elements.loadLastQuestionButton);
+  // Load last question button
+  elements.loadLastQuestionButton.addEventListener("click", () => {
+    toggleLastQuestion();
+  });
+};
+
+const toggleLastQuestion = () => {
+  let questionNumber = state.totalQuestions;
+  if (!state.viewingCurrentQuestion) {
+    questionNumber = state.currentQuestion;
+  }
+
+  // Load question image
+  elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
+  elements.questionImage.alt = `Question ${questionNumber} image`;
+  // show loader while image downloads
+  const imageLoader = document.getElementById("imageLoader");
+  if (imageLoader) {
+    imageLoader.style.display = "flex";
+  }
+  elements.questionImage.style.display = "none";
+  elements.questionImage.classList.remove("visible");
+
+  // Preload image then show
+  const img = new Image();
+  img.src = elements.questionImage.src;
+  img.onload = () => {
+    if (imageLoader) {
+      imageLoader.style.display = "none";
+    }
+    elements.questionImage.src = img.src;
+    elements.questionImage.style.display = "block";
+    // small timeout so CSS transition triggers reliably
+    requestAnimationFrame(() => {
+      elements.questionImage.classList.add("visible");
+    });
+  };
+  img.onerror = () => {
+    if (imageLoader) {
+      imageLoader.style.display = "none";
+    }
+    elements.questionImage.style.display = "none";
+    console.error("Failed to load image:", img.src);
+  };
+  state.viewingCurrentQuestion = !state.viewingCurrentQuestion;
 };
 
 const saveNotes = async () => {
