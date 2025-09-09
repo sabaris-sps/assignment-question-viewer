@@ -1,66 +1,172 @@
 {
+  "default": {
+    "name": "Default",
+    "assignments": {
+      "instructions": {
+        "name": "Instructions",
+        "questionCount": 1,
+        "accessForAll": true
+      }
+    }
+  },
   "emi": {
     "name": "EMI",
     "assignments": {
-      "cpp4": { "name": "CPP 4", "questionCount": 47,  "accessForAll": false },
-      "cpp5a": { "name": "CPP 5a - Inductors Transient State", "questionCount": 20,  "accessForAll": false },
-      "cpp6": { "name": "CPP 6 - INDUCTORS", "questionCount": 61,  "accessForAll": false }, 
-      "emipckg": { "name": "PCKG", "questionCount": 60,  "accessForAll": true }
+      "cpp4": {
+        "name": "CPP 4",
+        "questionCount": 47,
+        "accessForAll": false
+      },
+      "cpp5a": {
+        "name": "CPP 5a - Inductors Transient State",
+        "questionCount": 20,
+        "accessForAll": false
+      },
+      "cpp6": {
+        "name": "CPP 6 - INDUCTORS",
+        "questionCount": 61,
+        "accessForAll": false
+      },
+      "emipckg": {
+        "name": "PCKG",
+        "questionCount": 60,
+        "accessForAll": true
+      }
     }
   },
   "ac": {
     "name": "Alternating Current",
     "assignments": {
-      "cpp2": { "name": "CPP 2", "questionCount": 29,  "accessForAll": false },
-      "cpp3": { "name": "CPP 3", "questionCount": 25,  "accessForAll": false },
-      "cpp4": { "name": "CPP 4", "questionCount": 29,  "accessForAll": false }
+      "cpp2": {
+        "name": "CPP 2",
+        "questionCount": 29,
+        "accessForAll": false
+      },
+      "cpp3": {
+        "name": "CPP 3",
+        "questionCount": 25,
+        "accessForAll": false
+      },
+      "cpp4": {
+        "name": "CPP 4",
+        "questionCount": 29,
+        "accessForAll": false
+      }
     }
   },
   "rayoptics": {
     "name": "Ray Optics",
     "assignments": {
-      "rayoptics-cpp1": { "name": "CPP 1", "questionCount": 72,  "accessForAll": false },
-      "rayoptics-cpp2": { "name": "CPP 2", "questionCount": 41,  "accessForAll": false }
+      "rayoptics-cpp1": {
+        "name": "CPP 1",
+        "questionCount": 72,
+        "accessForAll": false
+      },
+      "rayoptics-cpp2": {
+        "name": "CPP 2",
+        "questionCount": 41,
+        "accessForAll": false
+      }
     }
   },
   "chemistry": {
     "name": "Chemistry",
     "assignments": {
-      "amines": { "name": "Amines", "questionCount": 51, "accessForAll": true  },
-      "solidstate": { "name": "Solid State", "questionCount": 51,   "accessForAll": true  }
+      "amines": {
+        "name": "Amines",
+        "questionCount": 51,
+        "accessForAll": true
+      },
+      "solidstate": {
+        "name": "Solid State",
+        "questionCount": 51,
+        "accessForAll": true
+      }
     }
   },
   "surface_chemistry": {
     "name": "Surface Chemistry",
     "assignments": {
-      "surface_assignment_1": { "name": "Assignment 1", "questionCount": 236, "accessForAll": true  }
+      "surface_assignment_1": {
+        "name": "Assignment 1",
+        "questionCount": 236,
+        "accessForAll": true
+      }
     }
   },
   "maths": {
     "name": "Maths",
     "assignments": {
-      "aod3": { "name": "AOD - 3", "questionCount": 27,  "accessForAll": false  },
-      "iidi": { "name": "II & DI", "questionCount": 20,   "accessForAll": false  }
+      "aod3": {
+        "name": "AOD - 3",
+        "questionCount": 27,
+        "accessForAll": false
+      },
+      "iidi": {
+        "name": "II & DI",
+        "questionCount": 20,
+        "accessForAll": false
+      }
     }
   },
   "area": {
     "name": "Area",
     "assignments": {
-      "areapckg": { "name": "PCKG", "questionCount": 63,  "accessForAll": true  }
+      "areapckg": {
+        "name": "PCKG",
+        "questionCount": 63,
+        "accessForAll": true
+      }
     }
   },
   "liquid": {
     "name": "Liquid Solution",
     "assignments": {
-      "ex1": { "name": "Exercise 1", "questionCount": 13,  "accessForAll": true  },
-      "ex2": { "name": "Exercise 2", "questionCount": 15,  "accessForAll": true  },
-      "ex3": { "name": "Exercise 3", "questionCount": 14,  "accessForAll": true  },
-      "solved1": { "name": "Solved pg.31-40", "questionCount": 39,  "accessForAll": true  },
-      "solved2": { "name": "Solved pg.41-47", "questionCount": 22,  "accessForAll": true  },
-      "cpp": { "name": "CPP", "questionCount": 16,  "accessForAll": true  },
-      "section2": { "name": "Section II", "questionCount": 44,  "accessForAll": true  },
-      "section3": { "name": "Section III", "questionCount": 20,  "accessForAll": true  },
-      "assignment": {"name": "Worksheet*", "questionCount": 51, "accessForAll": true}
+      "ex1": {
+        "name": "Exercise 1",
+        "questionCount": 13,
+        "accessForAll": true
+      },
+      "ex2": {
+        "name": "Exercise 2",
+        "questionCount": 15,
+        "accessForAll": true
+      },
+      "ex3": {
+        "name": "Exercise 3",
+        "questionCount": 14,
+        "accessForAll": true
+      },
+      "solved1": {
+        "name": "Solved pg.31-40",
+        "questionCount": 39,
+        "accessForAll": true
+      },
+      "solved2": {
+        "name": "Solved pg.41-47",
+        "questionCount": 22,
+        "accessForAll": true
+      },
+      "cpp": {
+        "name": "CPP",
+        "questionCount": 16,
+        "accessForAll": true
+      },
+      "section2": {
+        "name": "Section II",
+        "questionCount": 44,
+        "accessForAll": true
+      },
+      "section3": {
+        "name": "Section III",
+        "questionCount": 20,
+        "accessForAll": true
+      },
+      "assignment": {
+        "name": "Worksheet*",
+        "questionCount": 51,
+        "accessForAll": true
+      }
     }
   }
 }
