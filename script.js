@@ -323,9 +323,6 @@ const createMarkButtons = () => {
 // Load the assignment data list and fetch from firebase
 const loadAssignmentData = async () => {
   try {
-    // Fetch all user data from firebase
-    await fetchFromFirebase();
-
     // Fetch assignment list data
     const response = await fetch("./data.json");
     const data = await response.json();
@@ -451,8 +448,10 @@ const loadAssignment = async () => {
       elements.questionList.appendChild(questionNumber);
     }
 
-    // Updat question number styles for the new assignment question list
-    await updateQNumberStyleForAssignment();
+    await fetchFromFirebase();
+
+    // Update question number styles for the new assignment question list
+    updateQNumberStyleForAssignment();
 
     // Load first question
     await loadQuestion(1);
@@ -467,6 +466,7 @@ const loadAssignment = async () => {
   }
 };
 
+// fetch only once (optimised)
 const fetchFromFirebase = async () => {
   try {
     if (!state.currentUser) {
@@ -474,24 +474,39 @@ const fetchFromFirebase = async () => {
     }
 
     // Query all status documents for this user
-    const querySnapshot = await db
-      .collection("users")
-      .doc(state.currentUser.uid)
-      .collection("assignments")
-      .get();
+    isNewAssignment = true;
+    for (const key in state.questions) {
+      data = state.questions[key];
+      if (
+        data.chapter == state.currentChapter &&
+        data.assignment == state.currentAssignment
+      ) {
+        isNewAssignment = false;
+        break;
+      }
+    }
+    if (isNewAssignment) {
+      const querySnapshot = await db
+        .collection("users")
+        .doc(state.currentUser.uid)
+        .collection("assignments")
+        .where("chapter", "==", state.currentChapter)
+        .where("assignment", "==", state.currentAssignment)
+        .get();
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      state.questions[
-        `${data.chapter}_${data.assignment}_${data.questionNumber}`
-      ] = data;
-    });
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        state.questions[
+          `${data.chapter}_${data.assignment}_${data.questionNumber}`
+        ] = data;
+      });
+    }
   } catch (error) {
     console.error("Error loading data from firebase");
   }
 };
 
-const updateQNumberStyleForAssignment = async () => {
+const updateQNumberStyleForAssignment = () => {
   try {
     if (!state.currentUser) {
       // If no user, set all questions to 'none' status
