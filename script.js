@@ -13,6 +13,7 @@ const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// enable persistence if possible
 db.enablePersistence().catch((err) => {
   console.error("Firestore persistence failed:", err);
 });
@@ -31,6 +32,7 @@ const state = {
 
 const elements = {
   authContainer: document.getElementById("authContainer"),
+  resetContainer: document.getElementById("resetContainer"),
   verifyContainer: document.getElementById("verifyContainer"),
   authTitle: document.getElementById("authTitle"),
   authForm: document.getElementById("authForm"),
@@ -60,9 +62,17 @@ const elements = {
   checkVerificationBtn: document.getElementById("checkVerificationBtn"),
   signoutFromVerify: document.getElementById("signoutFromVerify"),
   verifyError: document.getElementById("verifyError"),
+  // reset UI elements
+  forgotPasswordLink: document.getElementById("forgotPasswordLink"),
+  resetEmailInput: document.getElementById("resetEmailInput"),
+  sendResetBtn: document.getElementById("sendResetBtn"),
+  backToAuthFromReset: document.getElementById("backToAuthFromReset"),
+  resetError: document.getElementById("resetError"),
 };
 
 let assignmentData = {};
+
+// ---------------- Auth & verification & reset flow ----------------
 
 const initAuth = () => {
   auth.onAuthStateChanged(async (user) => {
@@ -127,14 +137,11 @@ const initAuth = () => {
     try {
       elements.verifyError.textContent = "";
       elements.resendVerificationBtn.disabled = true;
-      elements.resendVerificationBtn.disabled = true;
-      elements.resendVerificationBtn.textContent = "Sending...";
       if (auth.currentUser) {
         await auth.currentUser.sendEmailVerification();
         elements.verifyError.style.color = "#cfeede";
         elements.verifyError.textContent =
           "Verification email sent — check inbox/spam.";
-        elements.resendVerificationBtn.textContent = "Resend verification mail";
       } else {
         elements.verifyError.style.color = "#ff8b8b";
         elements.verifyError.textContent =
@@ -144,6 +151,7 @@ const initAuth = () => {
       elements.verifyError.style.color = "#ff8b8b";
       elements.verifyError.textContent =
         "Error sending verification email: " + err.message;
+      console.error(err);
     } finally {
       elements.resendVerificationBtn.disabled = false;
     }
@@ -179,10 +187,53 @@ const initAuth = () => {
   elements.signoutFromVerify.addEventListener("click", async () => {
     await auth.signOut();
   });
+
+  // Forgot password flow
+  elements.forgotPasswordLink.addEventListener("click", () => {
+    // show reset UI, prefill email if available
+    elements.authContainer.style.display = "none";
+    elements.resetContainer.style.display = "flex";
+    elements.resetError.textContent = "";
+    elements.resetEmailInput.value = elements.authEmail.value || "";
+  });
+
+  elements.backToAuthFromReset.addEventListener("click", () => {
+    elements.resetContainer.style.display = "none";
+    showAuthUI();
+  });
+
+  elements.sendResetBtn.addEventListener("click", async () => {
+    try {
+      elements.resetError.textContent = "";
+      elements.sendResetBtn.disabled = true;
+      elements.sendResetBtn.textContent = "Sending...";
+      const email = elements.resetEmailInput.value.trim();
+      if (!email) {
+        elements.resetError.style.color = "#ff8b8b";
+        elements.resetError.textContent = "Please enter your email address.";
+        elements.sendResetBtn.disabled = false;
+        elements.sendResetBtn.textContent = "Send reset email";
+        return;
+      }
+
+      await auth.sendPasswordResetEmail(email);
+      elements.resetError.style.color = "#cfeede";
+      elements.resetError.textContent = `Reset email sent to ${email}. Check inbox/spam.`;
+    } catch (err) {
+      console.error("Error sending password reset:", err);
+      elements.resetError.style.color = "#ff8b8b";
+      elements.resetError.textContent =
+        err.message || "Failed to send reset email.";
+    } finally {
+      elements.sendResetBtn.disabled = false;
+      elements.sendResetBtn.textContent = "Send reset email";
+    }
+  });
 };
 
 const showAuthUI = () => {
   elements.authContainer.style.display = "flex";
+  elements.resetContainer.style.display = "none";
   elements.verifyContainer.style.display = "none";
   elements.userInfo.style.display = "none";
   // main content stays hidden until verified and initApp runs
@@ -190,6 +241,7 @@ const showAuthUI = () => {
 
 const showVerificationUI = (user) => {
   elements.authContainer.style.display = "none";
+  elements.resetContainer.style.display = "none";
   elements.verifyContainer.style.display = "flex";
   elements.userInfo.style.display = "none";
   elements.verifyEmail.textContent = user.email || "";
@@ -198,19 +250,37 @@ const showVerificationUI = (user) => {
 
 const showMainUIForVerifiedUser = (user) => {
   elements.authContainer.style.display = "none";
+  elements.resetContainer.style.display = "none";
   elements.verifyContainer.style.display = "none";
   elements.userInfo.style.display = "block";
   elements.userEmail.textContent = user.email || "";
 };
 
+// ---------------- App init & assignment loading ----------------
+
 const initApp = async () => {
   // At this point we expect state.currentUser to be set and verified
   createMarkButtons();
   await loadAssignmentData(); // get list of assignments from json
+  // set defaults if absent
+  if (!state.currentChapter || !state.currentAssignment) {
+    if (Object.keys(assignmentData).length > 0) {
+      state.currentChapter = Object.keys(assignmentData)[0];
+      state.currentAssignment = Object.keys(
+        assignmentData[state.currentChapter].assignments
+      )[0];
+    }
+  }
   const currentChapterData =
-    assignmentData[state.currentChapter]["assignments"];
+    assignmentData[state.currentChapter] &&
+    assignmentData[state.currentChapter]["assignments"]
+      ? assignmentData[state.currentChapter]["assignments"]
+      : { default: { questionCount: 1 } };
   state.totalQuestions =
-    currentChapterData[state.currentAssignment]["questionCount"] || 1;
+    currentChapterData[state.currentAssignment] &&
+    currentChapterData[state.currentAssignment]["questionCount"]
+      ? currentChapterData[state.currentAssignment]["questionCount"]
+      : 1;
   initDropdowns();
   await loadAssignment();
   setupEventListeners();
@@ -284,7 +354,10 @@ const loadAssignmentData = async () => {
       }
     }
 
-    if (Object.keys(assignmentData).length != 0) {
+    if (
+      Object.keys(assignmentData).length != 0 &&
+      (!state.currentChapter || !state.currentAssignment)
+    ) {
       state.currentChapter = Object.keys(assignmentData)[0];
       state.currentAssignment = Object.keys(
         assignmentData[state.currentChapter].assignments
@@ -300,6 +373,12 @@ const loadAssignmentData = async () => {
 };
 
 const initDropdowns = () => {
+  if (!assignmentData[state.currentChapter]) {
+    elements.chapterSelect.innerHTML = "";
+    elements.assignmentSelect.innerHTML = "";
+    return;
+  }
+
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
 
@@ -432,7 +511,8 @@ const fetchAllData = async () => {
 const loadQuestion = async (questionNumber) => {
   try {
     state.viewingCurrentQuestion = true;
-    elements.loadLastQuestionButton.innerText = "Load Answer Key";
+    if (elements.loadLastQuestionButton)
+      elements.loadLastQuestionButton.innerText = "Load Answer Key";
     state.currentQuestion = questionNumber;
     startQuestionTimer();
 
@@ -486,20 +566,10 @@ const loadQuestion = async (questionNumber) => {
     };
 
     // update notes and mark buttons
-    if (
-      state.questions[
-        `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-      ]
-    ) {
-      elements.notesArea.value =
-        state.questions[
-          `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`
-        ].notes || "";
-      updateMarkButtons(
-        state.questions[
-          `${state.currentChapter}_${state.currentAssignment}_${state.currentQuestion}`
-        ].markStatus || "none"
-      );
+    const docKey = `${state.currentChapter}_${state.currentAssignment}_${questionNumber}`;
+    if (state.questions[docKey]) {
+      elements.notesArea.value = state.questions[docKey].notes || "";
+      updateMarkButtons(state.questions[docKey].markStatus || "none");
     } else {
       elements.notesArea.value = "";
       updateMarkButtons("none");
@@ -560,9 +630,11 @@ const setupEventListeners = () => {
   });
 
   // Load last question button
-  elements.loadLastQuestionButton.addEventListener("click", () => {
-    toggleLastQuestion();
-  });
+  if (elements.loadLastQuestionButton) {
+    elements.loadLastQuestionButton.addEventListener("click", () => {
+      toggleLastQuestion();
+    });
+  }
 };
 
 const toggleLastQuestion = () => {
@@ -605,9 +677,11 @@ const toggleLastQuestion = () => {
   };
 
   state.viewingCurrentQuestion = !state.viewingCurrentQuestion;
-  elements.loadLastQuestionButton.innerText = "Load Current Question";
-  if (state.viewingCurrentQuestion) {
-    elements.loadLastQuestionButton.innerText = "Load Answer Key";
+  if (elements.loadLastQuestionButton) {
+    elements.loadLastQuestionButton.innerText = "Load Current Question";
+    if (state.viewingCurrentQuestion) {
+      elements.loadLastQuestionButton.innerText = "Load Answer Key";
+    }
   }
 };
 
@@ -617,6 +691,8 @@ const saveNotes = async () => {
     elements.saveNotesBtn.innerText = "Loading...";
     if (!state.currentUser) {
       console.log("No user logged in - skipping save");
+      elements.saveNotesBtn.disabled = false;
+      elements.saveNotesBtn.innerText = "Save Notes";
       return;
     }
 
@@ -790,10 +866,13 @@ const resetUI = () => {
 
   elements.questionList.innerHTML = "";
   elements.currentQuestionDisplay.textContent = "Select an assignment to begin";
-  elements.questionImage.style.display = "none";
-  document.querySelector(".notes-container").style.display = "none";
-  document.querySelector(".navigation").style.display = "none";
-  document.querySelector(".mark-options").style.display = "none";
+  if (elements.questionImage) elements.questionImage.style.display = "none";
+  const notes = document.querySelector(".notes-container");
+  if (notes) notes.style.display = "none";
+  const nav = document.querySelector(".navigation");
+  if (nav) nav.style.display = "none";
+  const marks = document.querySelector(".mark-options");
+  if (marks) marks.style.display = "none";
 };
 
 initAuth();

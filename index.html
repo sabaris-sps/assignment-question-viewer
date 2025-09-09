@@ -44,6 +44,75 @@
             Need to create an account?
           </div>
         </form>
+
+        <!-- Forgot password link -->
+        <div style="text-align: center; margin-top: 10px">
+          <button
+            id="forgotPasswordLink"
+            style="
+              background: none;
+              border: none;
+              color: var(--accent-2);
+              cursor: pointer;
+              font-weight: 700;
+            "
+          >
+            Forgot password?
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password reset UI -->
+    <div class="auth-container" id="resetContainer" style="display: none">
+      <div class="auth-box">
+        <div class="auth-title">Reset your password</div>
+        <p style="color: var(--muted); text-align: center; margin: 8px 0">
+          Enter the email address for your account — we'll send a link to reset
+          your password.
+        </p>
+        <div class="auth-error" id="resetError"></div>
+
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
+          "
+        >
+          <input
+            id="resetEmailInput"
+            class="auth-input"
+            placeholder="Email"
+            type="email"
+          />
+          <button class="auth-button" id="sendResetBtn">
+            Send reset email
+          </button>
+          <button
+            class="auth-button"
+            id="backToAuthFromReset"
+            style="
+              background: transparent;
+              color: var(--accent-2);
+              border: 1px solid rgba(255, 255, 255, 0.03);
+            "
+          >
+            Back
+          </button>
+        </div>
+
+        <p
+          style="
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 12px;
+          "
+        >
+          If you don't receive the email, check your spam folder or try again.
+        </p>
       </div>
     </div>
 
@@ -66,7 +135,7 @@
           "
         >
           <button class="auth-button" id="resendVerificationBtn">
-            Send verification email
+            Resend verification email
           </button>
           <button class="auth-button" id="checkVerificationBtn">
             I've verified — Check now
@@ -90,7 +159,7 @@
               border: 1px solid rgba(255, 255, 255, 0.03);
             "
           >
-            Log out
+            Sign out
           </button>
         </div>
 
