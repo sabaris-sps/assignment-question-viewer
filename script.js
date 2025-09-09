@@ -286,6 +286,7 @@ const initApp = async () => {
   setupEventListeners();
 };
 
+// Create the mark buttons from the list
 const createMarkButtons = () => {
   elements.markOptions.innerHTML = "";
 
@@ -319,11 +320,17 @@ const createMarkButtons = () => {
   });
 };
 
+// Load the assignment data list and fetch from firebase
 const loadAssignmentData = async () => {
   try {
+    // Fetch all user data from firebase
+    await fetchFromFirebase();
+
+    // Fetch assignment list data
     const response = await fetch("./data.json");
     const data = await response.json();
 
+    // Fetch unrestricted users for restricted assignments
     const userResponse = await fetch("./unrestrictedUsers.json");
     const unrestrictedUsers = await userResponse.json();
 
@@ -444,8 +451,8 @@ const loadAssignment = async () => {
       elements.questionList.appendChild(questionNumber);
     }
 
-    // Fetch all data of the assignment from firebase
-    await fetchAllData();
+    // Updat question number styles for the new assignment question list
+    await updateQNumberStyleForAssignment();
 
     // Load first question
     await loadQuestion(1);
@@ -460,13 +467,9 @@ const loadAssignment = async () => {
   }
 };
 
-const fetchAllData = async () => {
+const fetchFromFirebase = async () => {
   try {
     if (!state.currentUser) {
-      // If no user, set all questions to 'none' status
-      for (let i = 1; i <= state.totalQuestions; i++) {
-        updateQuestionNumberStyle(i, "none");
-      }
       return;
     }
 
@@ -477,14 +480,31 @@ const fetchAllData = async () => {
       .collection("assignments")
       .get();
 
-    // Filter and process the documents
-    const statusMap = {};
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      // Only process documents for current chapter and assignment
       state.questions[
         `${data.chapter}_${data.assignment}_${data.questionNumber}`
       ] = data;
+    });
+  } catch (error) {
+    console.error("Error loading data from firebase");
+  }
+};
+
+const updateQNumberStyleForAssignment = async () => {
+  try {
+    if (!state.currentUser) {
+      // If no user, set all questions to 'none' status
+      for (let i = 1; i <= state.totalQuestions; i++) {
+        updateQuestionNumberStyle(i, "none");
+      }
+      return;
+    }
+
+    // Filter and process the documents
+    const statusMap = {};
+    for (let docId in state.questions) {
+      data = state.questions[docId];
       if (
         data.assignment === state.currentAssignment &&
         data.chapter === state.currentChapter &&
@@ -492,7 +512,7 @@ const fetchAllData = async () => {
       ) {
         statusMap[data.questionNumber] = data.markStatus || "none";
       }
-    });
+    }
 
     // Update all question number styles
     for (let i = 1; i <= state.totalQuestions; i++) {
