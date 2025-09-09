@@ -510,7 +510,7 @@ select:-webkit-autofill {
 }
 
 .auth-box {
-  width: 380px;
+  width: 500px;
   padding: 28px;
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));

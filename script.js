@@ -31,6 +31,7 @@ const state = {
 
 const elements = {
   authContainer: document.getElementById("authContainer"),
+  verifyContainer: document.getElementById("verifyContainer"),
   authTitle: document.getElementById("authTitle"),
   authForm: document.getElementById("authForm"),
   authEmail: document.getElementById("authEmail"),
@@ -53,6 +54,12 @@ const elements = {
   currentQuestionDisplay: document.getElementById("currentQuestion"),
   markOptions: document.getElementById("markOptions"),
   questionTimer: document.getElementById("questionTimer"),
+  // verify UI elements
+  verifyEmail: document.getElementById("verifyEmail"),
+  resendVerificationBtn: document.getElementById("resendVerificationBtn"),
+  checkVerificationBtn: document.getElementById("checkVerificationBtn"),
+  signoutFromVerify: document.getElementById("signoutFromVerify"),
+  verifyError: document.getElementById("verifyError"),
 };
 
 let assignmentData = {};
@@ -60,15 +67,22 @@ let assignmentData = {};
 const initAuth = () => {
   auth.onAuthStateChanged(async (user) => {
     state.currentUser = user;
-    if (user) {
-      elements.userEmail.textContent = user.email;
-      elements.userInfo.style.display = "block";
-      elements.authContainer.style.display = "none";
+
+    if (!user) {
+      // Not signed in
+      showAuthUI();
+      resetUI();
+      return;
+    }
+
+    // Signed in: check email verification
+    if (user.emailVerified) {
+      // Show main UI and initialize app
+      showMainUIForVerifiedUser(user);
       await initApp();
     } else {
-      elements.userInfo.style.display = "none";
-      elements.authContainer.style.display = "flex";
-      resetUI();
+      // Show verification UI (do NOT load assignment data)
+      showVerificationUI(user);
     }
   });
 
@@ -80,16 +94,24 @@ const initAuth = () => {
   elements.authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
+      elements.authError.textContent = "";
       if (state.isLoginMode) {
         await auth.signInWithEmailAndPassword(
           elements.authEmail.value,
           elements.authPassword.value
         );
+        // onAuthStateChanged will handle the rest
       } else {
-        await auth.createUserWithEmailAndPassword(
+        // Create account and send verification email
+        const userCredential = await auth.createUserWithEmailAndPassword(
           elements.authEmail.value,
           elements.authPassword.value
         );
+        // send verification email
+        if (userCredential && userCredential.user) {
+          await userCredential.user.sendEmailVerification();
+        }
+        // Keep user signed in but they will see the verify UI via onAuthStateChanged
       }
     } catch (error) {
       elements.authError.textContent = error.message;
@@ -99,16 +121,96 @@ const initAuth = () => {
   elements.logoutButton.addEventListener("click", () => {
     auth.signOut();
   });
+
+  // Verification UI buttons
+  elements.resendVerificationBtn.addEventListener("click", async () => {
+    try {
+      elements.verifyError.textContent = "";
+      elements.resendVerificationBtn.disabled = true;
+      elements.resendVerificationBtn.disabled = true;
+      elements.resendVerificationBtn.textContent = "Sending...";
+      if (auth.currentUser) {
+        await auth.currentUser.sendEmailVerification();
+        elements.verifyError.style.color = "#cfeede";
+        elements.verifyError.textContent =
+          "Verification email sent — check inbox/spam.";
+        elements.resendVerificationBtn.textContent = "Resend verification mail";
+      } else {
+        elements.verifyError.style.color = "#ff8b8b";
+        elements.verifyError.textContent =
+          "No signed-in user to send email to.";
+      }
+    } catch (err) {
+      elements.verifyError.style.color = "#ff8b8b";
+      elements.verifyError.textContent =
+        "Error sending verification email: " + err.message;
+    } finally {
+      elements.resendVerificationBtn.disabled = false;
+    }
+  });
+
+  elements.checkVerificationBtn.addEventListener("click", async () => {
+    try {
+      elements.verifyError.textContent = "";
+      elements.checkVerificationBtn.disabled = true;
+      // reload current user and check verified flag
+      if (auth.currentUser) {
+        await auth.currentUser.reload();
+        if (auth.currentUser.emailVerified) {
+          // hide verify UI and initialize app
+          showMainUIForVerifiedUser(auth.currentUser);
+          await initApp();
+        } else {
+          elements.verifyError.style.color = "#ff8b8b";
+          elements.verifyError.textContent =
+            "Still not verified. Click the link in the verification email and then click 'I've verified — Check now'.";
+        }
+      }
+    } catch (err) {
+      elements.verifyError.style.color = "#ff8b8b";
+      elements.verifyError.textContent =
+        "Error checking verification: " + err.message;
+      console.error(err);
+    } finally {
+      elements.checkVerificationBtn.disabled = false;
+    }
+  });
+
+  elements.signoutFromVerify.addEventListener("click", async () => {
+    await auth.signOut();
+  });
+};
+
+const showAuthUI = () => {
+  elements.authContainer.style.display = "flex";
+  elements.verifyContainer.style.display = "none";
+  elements.userInfo.style.display = "none";
+  // main content stays hidden until verified and initApp runs
+};
+
+const showVerificationUI = (user) => {
+  elements.authContainer.style.display = "none";
+  elements.verifyContainer.style.display = "flex";
+  elements.userInfo.style.display = "none";
+  elements.verifyEmail.textContent = user.email || "";
+  elements.verifyError.textContent = "";
+};
+
+const showMainUIForVerifiedUser = (user) => {
+  elements.authContainer.style.display = "none";
+  elements.verifyContainer.style.display = "none";
+  elements.userInfo.style.display = "block";
+  elements.userEmail.textContent = user.email || "";
 };
 
 const initApp = async () => {
+  // At this point we expect state.currentUser to be set and verified
   createMarkButtons();
   await loadAssignmentData(); // get list of assignments from json
   const currentChapterData =
     assignmentData[state.currentChapter]["assignments"];
   state.totalQuestions =
     currentChapterData[state.currentAssignment]["questionCount"] || 1;
-  // await Promise.all([loadNotes(1), loadMarkStatus(1)]);
   initDropdowns();
   await loadAssignment();
   setupEventListeners();
@@ -164,7 +266,11 @@ const loadAssignmentData = async () => {
         if (assignment.accessForAll) {
           filteredAssignments[assignmentKey] = assignment;
         } else {
-          if (unrestrictedUsers.includes(state.currentUser.email)) {
+          // only allow if current user's email is in unrestricted list
+          if (
+            state.currentUser &&
+            unrestrictedUsers.includes(state.currentUser.email)
+          ) {
             filteredAssignments[assignmentKey] = assignment;
           }
         }

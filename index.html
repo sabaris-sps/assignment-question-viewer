@@ -47,6 +47,67 @@
       </div>
     </div>
 
+    <!-- Verification container: shown when a user is signed in but not verified -->
+    <div class="auth-container" id="verifyContainer" style="display: none">
+      <div class="auth-box">
+        <div class="auth-title">Verify your email</div>
+        <p style="color: #cfeede; text-align: center; margin: 8px 0">
+          We've sent a verification link to
+          <strong id="verifyEmail"></strong>
+        </p>
+        <div class="auth-error" id="verifyError"></div>
+
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+          "
+        >
+          <button class="auth-button" id="resendVerificationBtn">
+            Send verification email
+          </button>
+          <button class="auth-button" id="checkVerificationBtn">
+            I've verified — Check now
+          </button>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+          "
+        >
+          <button
+            class="auth-button"
+            id="signoutFromVerify"
+            style="
+              background: transparent;
+              color: var(--accent-2);
+              border: 1px solid rgba(255, 255, 255, 0.03);
+            "
+          >
+            Log out
+          </button>
+        </div>
+
+        <p
+          style="
+            color: var(--muted);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 12px;
+          "
+        >
+          If you don't see the email, check your spam/junk folder or try
+          resending.
+        </p>
+      </div>
+    </div>
+
     <div class="sidebar">
       <h2>Questions</h2>
       <div class="question-list" id="questionList">
