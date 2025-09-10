@@ -22,9 +22,10 @@
   --glass-blur: 10px;
   --max-width: 1100px;
   --done: #05df72;
-  --good: #7008e7;
+  --good: oklch(66.7% 0.295 322.15);
   --review: #e17100;
   --doubt: #f54900;
+  --flag: #7008e7;
   --none: grey;
   --ui-color-success-600: #00a63e;
   --ui-color-yellow-500: #f0b100;
@@ -142,36 +143,6 @@ body {
   background: color-mix(in oklab, var(--ui-color-gray-300) 10%, transparent) !important;
   color: var(--ui-color-gray-300);
   border-color: var(--ui-color-gray-300);
-  border-width: 1px;
-}
-
-/* Badges for marked states - tuned for new palette */
-
-.question-number.marked-done {
-  background: color-mix(in oklab, var(--ui-color-success-600) 20%, transparent);
-  color: var(--ui-color-success-600);
-  border-color: currentColor;
-  border-width: 1px;
-}
-
-.question-number.marked-review {
-  background: color-mix(in oklab, var(--ui-color-yellow-500) 20%, transparent);
-  color: var(--ui-color-yellow-500);
-  border-color: currentColor;
-  border-width: 1px;
-}
-
-.question-number.marked-good {
-  background: color-mix(in oklab, var(--good) 20%, transparent);
-  color: var(--good);
-  border-color: currentColor;
-  border-width: 1px;
-}
-
-.question-number.marked-doubt {
-  background: color-mix(in oklab, var(--doubt) 20%, transparent);
-  color: var(--doubt);
-  border-color: currentColor;
   border-width: 1px;
 }
 

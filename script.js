@@ -23,7 +23,7 @@ const state = {
   currentQuestion: 1,
   textareaHasFocus: false,
   isLoginMode: true,
-  markStatusTypes: ["done", "good", "review", "doubt", "none"],
+  markStatusTypes: ["done", "good", "review", "doubt", "flag", "none"],
   timerInterval: null,
   timerSeconds: 0,
   questions: {},
@@ -291,6 +291,7 @@ const createMarkButtons = () => {
   elements.markOptions.innerHTML = "";
 
   // Create a button for each status type
+  let style_list = ``;
   state.markStatusTypes.forEach((status) => {
     const button = document.createElement("button");
     button.id = `mark${status.charAt(0).toUpperCase() + status.slice(1)}Button`;
@@ -303,6 +304,15 @@ const createMarkButtons = () => {
       await saveMarkStatus(state.currentQuestion, status);
     });
 
+    style_list += `
+      .question-number.marked-${status} {
+        background: color-mix(in oklab, var(--${status}) 20%, transparent);
+        color: var(--${status});
+        border-color: currentColor;
+        border-width: 1px;
+      }
+    `;
+
     button.style = `
     background: color-mix(in oklab, var(--${status}) 10%, transparent);
     color: var(--${status});
@@ -310,6 +320,10 @@ const createMarkButtons = () => {
 
     elements.markOptions.appendChild(button);
   });
+
+  questionNumberStylesheet = document.createElement("style");
+  questionNumberStylesheet.innerHTML = style_list;
+  document.head.appendChild(questionNumberStylesheet);
 
   // Update elements object with the new buttons
   state.markStatusTypes.forEach((status) => {
