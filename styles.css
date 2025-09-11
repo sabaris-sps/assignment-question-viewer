@@ -30,6 +30,10 @@
   --ui-color-success-600: #00a63e;
   --ui-color-yellow-500: #f0b100;
   --ui-color-gray-300: #6a7282;
+  --others: oklch(21% 0.034 264.665);
+  --physics: oklch(28.2% 0.091 267.935);
+  --maths: oklch(27.1% 0.105 12.094);
+  --chemistry: oklch(26.2% 0.051 172.552);
 }
 
 /* Page layout */
@@ -447,6 +451,13 @@ select option,
 select optgroup {
   background-color: #071221;
   color: #e9f7f0;
+  border-radius: 0;
+}
+
+select option:hover {
+  opacity: 0.9;
+  background-color: oklch(55.4% 0.135 66.442);
+
 }
 
 /* Improve appearance on Windows/Edge */

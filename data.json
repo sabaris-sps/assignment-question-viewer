@@ -1,6 +1,7 @@
 {
   "default": {
     "name": "Default",
+    "subject": "Others",
     "assignments": {
       "instructions": {
         "name": "Instructions",
@@ -11,6 +12,7 @@
   },
   "emi": {
     "name": "EMI",
+    "subject": "Physics",
     "assignments": {
       "cpp4": {
         "name": "CPP 4",
@@ -36,6 +38,7 @@
   },
   "ac": {
     "name": "Alternating Current",
+    "subject": "Physics",
     "assignments": {
       "cpp2": {
         "name": "CPP 2",
@@ -56,6 +59,7 @@
   },
   "rayoptics": {
     "name": "Ray Optics",
+    "subject": "Physics",
     "assignments": {
       "rayoptics-cpp1": {
         "name": "CPP 1",
@@ -71,6 +75,7 @@
   },
   "chemistry": {
     "name": "Chemistry",
+    "subject": "Chemistry",
     "assignments": {
       "amines": {
         "name": "Amines",
@@ -86,6 +91,7 @@
   },
   "surface_chemistry": {
     "name": "Surface Chemistry",
+    "subject": "Chemistry",
     "assignments": {
       "surface_assignment_1": {
         "name": "Assignment 1",
@@ -94,33 +100,20 @@
       }
     }
   },
-  "maths": {
-    "name": "Maths",
+  "metallurgy": {
+    "name": "Metallurgy",
+    "subject": "Chemistry",
     "assignments": {
-      "aod3": {
-        "name": "AOD - 3",
-        "questionCount": 27,
-        "accessForAll": false
-      },
-      "iidi": {
-        "name": "II & DI",
-        "questionCount": 20,
-        "accessForAll": false
-      }
-    }
-  },
-  "area": {
-    "name": "Area",
-    "assignments": {
-      "areapckg": {
-        "name": "PCKG",
-        "questionCount": 63,
+      "metallurgy_1": {
+        "name": "Assignment 1",
+        "questionCount": 372,
         "accessForAll": true
       }
     }
   },
   "liquid": {
     "name": "Liquid Solution",
+    "subject": "Chemistry",
     "assignments": {
       "ex1": {
         "name": "Exercise 1",
@@ -165,6 +158,33 @@
       "assignment": {
         "name": "Worksheet*",
         "questionCount": 51,
+        "accessForAll": true
+      }
+    }
+  },
+  "maths": {
+    "name": "Maths",
+    "subject": "Maths",
+    "assignments": {
+      "aod3": {
+        "name": "AOD - 3",
+        "questionCount": 27,
+        "accessForAll": false
+      },
+      "iidi": {
+        "name": "II & DI",
+        "questionCount": 20,
+        "accessForAll": false
+      }
+    }
+  },
+  "area": {
+    "name": "Area",
+    "subject": "Maths",
+    "assignments": {
+      "areapckg": {
+        "name": "PCKG",
+        "questionCount": 63,
         "accessForAll": true
       }
     }

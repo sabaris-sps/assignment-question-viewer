@@ -367,6 +367,7 @@ const loadAssignmentData = async () => {
       if (Object.keys(filteredAssignments).length != 0) {
         assignmentData[subjectKey] = {
           name: subject.name,
+          subject: subject.subject,
           assignments: filteredAssignments,
         };
       }
@@ -406,6 +407,8 @@ const initDropdowns = () => {
     option.value = id;
     option.textContent = details.name;
     elements.chapterSelect.appendChild(option);
+
+    option.style.background = `var(--${details.subject?.toLowerCase()})`;
   });
 
   elements.assignmentSelect.innerHTML = "";
