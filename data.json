@@ -120,14 +120,9 @@
     "name": "P Block",
     "subject": "Chemistry",
     "assignments": {
-      "g15a2p1": {
-        "name": "G15 - A2 Part 1",
-        "questionCount": 61,
-        "accessForAll": true
-      },
-      "g15a2p2": {
-        "name": "G15 - A2 Part 2",
-        "questionCount": 65,
+      "g15a2": {
+        "name": "G15 - A2",
+        "questionCount": 125,
         "accessForAll": true
       }
     }
