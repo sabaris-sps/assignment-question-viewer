@@ -116,6 +116,22 @@
       }
     }
   },
+  "p_block": {
+    "name": "P Block",
+    "subject": "Chemistry",
+    "assignments": {
+      "g15a2p1": {
+        "name": "G15 - A2 Part 1",
+        "questionCount": 61,
+        "accessForAll": true
+      },
+      "g15a2p2": {
+        "name": "G15 - A2 Part 2",
+        "questionCount": 65,
+        "accessForAll": true
+      }
+    }
+  },
   "liquid": {
     "name": "Liquid Solution",
     "subject": "Chemistry",
