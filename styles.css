@@ -103,8 +103,8 @@ body {
 
 .question-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(44px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(44px, 1fr));
+  gap: 4px;
   /* increase top padding so animated upward movement of items stays inside the list box */
   padding: 16px 4px 20px 4px;
   overflow: auto;
@@ -113,23 +113,22 @@ body {
 }
 
 .question-number {
-  height: 42px;
-  width: 48px;
+  aspect-ratio: 1.08;
+  width: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(180deg, #14293a, #0f2434);
   color: var(--accent-2);
   font-weight: 600;
-  border-radius: 5px;
   cursor: pointer;
   transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
   position: relative;
-  /* box-shadow: 0 6px 12px rgba(2, 6, 23, 0.45); */
   border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 30%;
   will-change: transform;
   z-index: 2;
-  /* ensure it can appear above nearby elements when translating */
+  font-size: 80%;
 }
 
 .question-number:hover {
@@ -137,17 +136,12 @@ body {
   box-shadow: 0 12px 22px rgba(2, 6, 23, 0.6)
 }
 
-/* .question-number.active {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #042017;
-  box-shadow: 0 10px 30px rgba(45, 220, 150, 0.18), inset 0 -4px 12px rgba(0, 0, 0, 0.08);
-} */
-
 .question-number.active {
   background: color-mix(in oklab, var(--ui-color-gray-300) 10%, transparent) !important;
   color: var(--ui-color-gray-300);
   border-color: var(--ui-color-gray-300);
   border-width: 1px;
+  transform: scale(1.2);
 }
 
 /* Main content area */
