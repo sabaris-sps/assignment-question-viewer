@@ -75,6 +75,11 @@
         "name": "CPP 1a",
         "questionCount": 69,
         "accessForAll": false
+      },
+      "rayoptics-cpp4": {
+        "name": "CPP 4",
+        "questionCount": 70,
+        "accessForAll": false
       }
     }
   },
