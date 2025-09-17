@@ -71,6 +71,7 @@ const elements = {
 };
 
 let assignmentData = {};
+let answersMap = {};
 
 // ---------------- Auth & verification & reset flow ----------------
 
@@ -481,6 +482,18 @@ const loadAssignment = async () => {
   } catch (error) {
     console.error("Error loading assignment:", error);
   }
+
+  try {
+    const response = await fetch(
+      `images/${state.currentChapter}/${state.currentAssignment}/answers_map.json`
+    );
+    answersMap = await response.json();
+  } catch (error) {
+    console.warn(
+      "answers_map.json not found or invalid, fallback to last question."
+    );
+    answersMap = {}; // fallback to empty object
+  }
 };
 
 // fetch only once (optimised)
@@ -695,10 +708,25 @@ const toggleLastQuestion = () => {
     questionNumber = state.currentQuestion;
   }
 
-  // Load question image
-  elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
-  elements.questionImage.alt = `Question ${questionNumber} image`;
-  // show loader while image downloads
+  // Determine the image source
+  let imageSrc = "";
+  if (state.viewingCurrentQuestion) {
+    if (answersMap[state.currentQuestion]) {
+      imageSrc = `images/${state.currentChapter}/${state.currentAssignment}/${
+        answersMap[state.currentQuestion]
+      }`;
+    } else {
+      imageSrc = `images/${state.currentChapter}/${state.currentAssignment}/${state.totalQuestions}.png`;
+    }
+  } else {
+    imageSrc = `images/${state.currentChapter}/${state.currentAssignment}/${state.currentQuestion}.png`;
+  }
+
+  elements.questionImage.src = imageSrc;
+  elements.questionImage.alt = `Image for ${
+    state.viewingCurrentQuestion ? "Answer Key" : "Question"
+  } ${state.currentQuestion}`;
+
   const imageLoader = document.getElementById("imageLoader");
   if (imageLoader) {
     imageLoader.style.display = "flex";
@@ -706,16 +734,14 @@ const toggleLastQuestion = () => {
   elements.questionImage.style.display = "none";
   elements.questionImage.classList.remove("visible");
 
-  // Preload image then show
   const img = new Image();
-  img.src = elements.questionImage.src;
+  img.src = imageSrc;
   img.onload = () => {
     if (imageLoader) {
       imageLoader.style.display = "none";
     }
     elements.questionImage.src = img.src;
     elements.questionImage.style.display = "block";
-    // small timeout so CSS transition triggers reliably
     requestAnimationFrame(() => {
       elements.questionImage.classList.add("visible");
     });
@@ -730,10 +756,9 @@ const toggleLastQuestion = () => {
 
   state.viewingCurrentQuestion = !state.viewingCurrentQuestion;
   if (elements.loadLastQuestionButton) {
-    elements.loadLastQuestionButton.innerText = "Load Current Question";
-    if (state.viewingCurrentQuestion) {
-      elements.loadLastQuestionButton.innerText = "Load Answer Key";
-    }
+    elements.loadLastQuestionButton.innerText = state.viewingCurrentQuestion
+      ? "Load Answer Key"
+      : "Load Current Question";
   }
 };
 
