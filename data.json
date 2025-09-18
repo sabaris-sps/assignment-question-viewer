@@ -126,13 +126,23 @@
     "subject": "Chemistry",
     "assignments": {
       "g15a2": {
-        "name": "G15 - A2",
+        "name": "Group 15-A2",
         "questionCount": 125,
         "accessForAll": true
       },
       "g16a1": {
-        "name": "G16 - A1",
+        "name": "Group 16",
         "questionCount": 106,
+        "accessForAll": true
+      },
+      "g17a1": {
+        "name": "Group 17",
+        "questionCount": 261,
+        "accessForAll": true
+      },
+      "g18a1": {
+        "name": "Group 18",
+        "questionCount": 154,
         "accessForAll": true
       }
     }
