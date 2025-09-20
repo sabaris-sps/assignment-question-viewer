@@ -147,6 +147,27 @@
       }
     }
   },
+  "poc": {
+    "name": "POC",
+    "subject": "Chemistry",
+    "assignments": {
+      "purification": {
+        "name": "Purification Methods",
+        "questionCount": 34,
+        "accessForAll": true
+      },
+      "qualitative": {
+        "name": "Qualitative Analysis",
+        "questionCount": 10,
+        "accessForAll": true
+      },
+      "quantitative": {
+        "name": "Quantitative Analysis",
+        "questionCount": 19,
+        "accessForAll": true
+      }
+    }
+  },
   "liquid": {
     "name": "Liquid Solution",
     "subject": "Chemistry",
