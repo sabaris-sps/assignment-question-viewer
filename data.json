@@ -62,23 +62,33 @@
     "subject": "Physics",
     "assignments": {
       "rayoptics-cpp1": {
-        "name": "CPP 1",
+        "name": "CPP 1 Plane mirrors",
         "questionCount": 72,
         "accessForAll": false
       },
       "rayoptics-cpp2": {
-        "name": "CPP 2",
+        "name": "CPP 2 Spherical Mirrors",
         "questionCount": 41,
         "accessForAll": false
       },
       "rayoptics-cpp1a": {
-        "name": "CPP 1a",
+        "name": "CPP 1a Refraction(plane surf)",
         "questionCount": 69,
         "accessForAll": false
       },
       "rayoptics-cpp4": {
-        "name": "CPP 4",
+        "name": "CPP 4 Thin lens(basics)",
         "questionCount": 70,
+        "accessForAll": false
+      },
+      "rayoptics-cpp3": {
+        "name": "CPP 3 Prisms",
+        "questionCount": 28,
+        "accessForAll": false
+      },
+      "rayoptics-cpp6": {
+        "name": "CPP 6 Thin lenses",
+        "questionCount": 21,
         "accessForAll": false
       }
     }
