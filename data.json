@@ -90,6 +90,11 @@
         "name": "CPP 6 Thin lenses",
         "questionCount": 21,
         "accessForAll": false
+      },
+      "rayoptics-cpp8": {
+        "name": "CPP 8 Optical Instruments",
+        "questionCount": 35,
+        "accessForAll": false
       }
     }
   },
