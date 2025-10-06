@@ -98,6 +98,22 @@
       }
     }
   },
+  "waveoptics": {
+    "name": "Wave Optics",
+    "subject": "Physics",
+    "assignments": {
+      "waveoptics-cpp1": {
+        "name": "CPP 1 YDSE Basics 1",
+        "questionCount": 49,
+        "accessForAll": false
+      },
+      "waveoptics-cpp2": {
+        "name": "CPP 2 YDSE Basics 2",
+        "questionCount": 36,
+        "accessForAll": false
+      }
+    }
+  },
   "chemistry": {
     "name": "Chemistry",
     "subject": "Chemistry",
