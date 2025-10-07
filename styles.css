@@ -482,7 +482,7 @@ select:-webkit-autofill {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000
+  z-index: 200;
 }
 
 .auth-box {
@@ -553,7 +553,7 @@ select:-webkit-autofill {
   display: flex;
   align-items: center;
   gap: 8px;
-  z-index: 800
+  z-index: 300;
 }
 
 .logout-button {

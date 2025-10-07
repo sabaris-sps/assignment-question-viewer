@@ -9,7 +9,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <link href="image-zoom/zoom.css" rel="stylesheet" />
   </head>
+
   <body>
     <!-- Add user info display -->
     <div class="user-info" id="userInfo" style="display: none">
@@ -209,6 +211,7 @@
             src=""
             alt="Question image"
             style="display: none"
+            data-action="zoom"
           />
           <div
             id="imageLoader"
@@ -240,6 +243,7 @@
       </div>
     </div>
 
+    <script src="image-zoom/zoom-vanilla.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
