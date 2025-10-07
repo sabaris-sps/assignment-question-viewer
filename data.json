@@ -255,6 +255,17 @@
       }
     }
   },
+  "electrochemistry": {
+    "name": "Electrochemistry",
+    "subject": "Chemistry",
+    "assignments": {
+      "electrolysis": {
+        "name": "Electrolysis",
+        "questionCount": 43,
+        "accessForAll": true
+      }
+    }
+  },
   "maths": {
     "name": "Maths",
     "subject": "Maths",
