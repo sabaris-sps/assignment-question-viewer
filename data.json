@@ -276,6 +276,22 @@
       }
     }
   },
+  "kinetics": {
+    "name": "Chemical Kinetics",
+    "subject": "Chemistry",
+    "assignments": {
+      "chemical_kinetics_1": {
+        "name": "Kinetics Asgn 1",
+        "questionCount": 49,
+        "accessForAll": true
+      },
+      "radioactivity": {
+        "name": "Radioactivity",
+        "questionCount": 27,
+        "accessForAll": true
+      }
+    }
+  },
   "maths": {
     "name": "Maths",
     "subject": "Maths",
