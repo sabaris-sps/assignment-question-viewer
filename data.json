@@ -114,6 +114,32 @@
       }
     }
   },
+  "modern_phy": {
+    "name": "Modern Physics",
+    "subject": "Physics",
+    "assignments": {
+      "cpp4_photoelectric": {
+        "name": "CPP 4 Photoelectric and Radiation pressure",
+        "questionCount": 40,
+        "accessForAll": false
+      },
+      "cpp1_atomic_structure": {
+        "name": "CPP 1 Atomic Structure",
+        "questionCount": 50,
+        "accessForAll": false
+      },
+      "cpp5_radioactivity": {
+        "name": "CPP 5 Radioactivity",
+        "questionCount": 49,
+        "accessForAll": false
+      },
+      "cpp6_xrays": {
+        "name": "CPP 6 X Rays",
+        "questionCount": 30,
+        "accessForAll": false
+      }
+    }
+  },
   "chemistry": {
     "name": "Chemistry",
     "subject": "Chemistry",
