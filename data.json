@@ -10,6 +10,17 @@
       }
     }
   },
+  "phy_11th": {
+    "name": "Physics 11th Asgn",
+    "subject": "Physics",
+    "assignments": {
+      "cpp9_collsion": {
+        "name": "CPP 9 Collision of non hinged objects",
+        "questionCount": 31,
+        "accessForAll": false
+      }
+    }
+  },
   "emi": {
     "name": "EMI",
     "subject": "Physics",
