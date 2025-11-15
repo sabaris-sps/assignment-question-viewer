@@ -14,9 +14,24 @@
     "name": "Physics 11th Asgn",
     "subject": "Physics",
     "assignments": {
-      "cpp9_collsion": {
+      "cpp19_impulsive_tension": {
+        "name": "CPP 19 Impulsive Tension & Collisions",
+        "questionCount": 34,
+        "accessForAll": false
+      },
+      "cpp7_springblocksystem": {
+        "name": "CPP 7 Spring block system",
+        "questionCount": 11,
+        "accessForAll": false
+      },
+      "cpp9_collision": {
         "name": "CPP 9 Collision of non hinged objects",
         "questionCount": 31,
+        "accessForAll": false
+      },
+      "cpp14_rollingkinetics": {
+        "name": "CPP 14 Rolling Kinetics",
+        "questionCount": 42,
         "accessForAll": false
       }
     }
