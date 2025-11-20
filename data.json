@@ -33,6 +33,11 @@
         "name": "CPP 14 Rolling Kinetics",
         "questionCount": 42,
         "accessForAll": false
+      },
+      "cpp4a_mechenergy_principles": {
+        "name": "CPP 4a Mechanical Energy Principles",
+        "questionCount": 31,
+        "accessForAll": false
       }
     }
   },
