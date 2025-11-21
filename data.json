@@ -11,7 +11,7 @@
     }
   },
   "phy_11th": {
-    "name": "Physics 11th Asgn",
+    "name": "Mechanics",
     "subject": "Physics",
     "assignments": {
       "cpp19_impulsive_tension": {
@@ -37,6 +37,22 @@
       "cpp4a_mechenergy_principles": {
         "name": "CPP 4a Mechanical Energy Principles",
         "questionCount": 31,
+        "accessForAll": false
+      }
+    }
+  },
+  "thermo": {
+    "name": "Thermo",
+    "subject": "Physics",
+    "assignments": {
+      "cpp5_ktg_lvl2": {
+        "name": "CPP 5 KTG level 2",
+        "questionCount": 23,
+        "accessForAll": false
+      },
+      "cpp7_thermodynamics": {
+        "name": "CPP 7 Thermodynamics",
+        "questionCount": 63,
         "accessForAll": false
       }
     }
