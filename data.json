@@ -45,9 +45,34 @@
     "name": "Thermo",
     "subject": "Physics",
     "assignments": {
+      "cpp1_thermal_expansion": {
+        "name": "CPP 1 Thermal Expansion",
+        "questionCount": 39,
+        "accessForAll": false
+      },
+      "cpp3_calorimetry_lvl2": {
+        "name": "CPP 3 Calorimetry level 2",
+        "questionCount": 18,
+        "accessForAll": false
+      },
+      "cpp10_conduction_lvl2": {
+        "name": "CPP 10 Conduction level 2",
+        "questionCount": 11,
+        "accessForAll": false
+      },
+      "cpp12_radiation": {
+        "name": "CPP 12 Radiation heat transfer",
+        "questionCount": 38,
+        "accessForAll": false
+      },
       "cpp5_ktg_lvl2": {
         "name": "CPP 5 KTG level 2",
         "questionCount": 23,
+        "accessForAll": false
+      },
+      "cpp6_ktg_lvl3": {
+        "name": "CPP 6 KTG level 3",
+        "questionCount": 11,
         "accessForAll": false
       },
       "cpp7_thermodynamics": {
