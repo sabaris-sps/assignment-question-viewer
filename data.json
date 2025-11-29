@@ -82,6 +82,37 @@
       }
     }
   },
+  "fluids": {
+    "name": "Fluids",
+    "subject": "Physics",
+    "assignments": {
+      "topic4_accelerating_utube": {
+        "name": "T4 - Accelerating U-tube",
+        "questionCount": 16,
+        "accessForAll": false
+      },
+      "topic5_netforce_on _container": {
+        "name": "T5 - Net Force on bottom, side walls",
+        "questionCount": 10,
+        "accessForAll": false
+      },
+      "topic6_force_torque": {
+        "name": "T6 - Force, torque on flat vertical wall",
+        "questionCount": 8,
+        "accessForAll": false
+      },
+      "topic7_force_curved_surface": {
+        "name": "T7 - Force on Curved surface of solid",
+        "questionCount": 7,
+        "accessForAll": false
+      },
+      "topic8_9_pressure_variation": {
+        "name": "T8 - Pressure variation",
+        "questionCount": 15,
+        "accessForAll": false
+      }
+    }
+  },
   "emi": {
     "name": "EMI",
     "subject": "Physics",
