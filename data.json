@@ -10,6 +10,17 @@
       }
     }
   },
+  "shm_waves": {
+    "name": "SHM, Waves",
+    "subject": "Physics",
+    "assignments": {
+      "cpp13_shm_aits": {
+        "name": "CPP 13 SHM AITS",
+        "questionCount": 30,
+        "accessForAll": false
+      }
+    }
+  },
   "phy_11th": {
     "name": "Mechanics",
     "subject": "Physics",
