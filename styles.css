@@ -197,6 +197,7 @@ body {
   padding: 30px;
   background: var(--bg-surface);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 10px;
 }
 
 .assignment-selector {
@@ -218,7 +219,8 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  justify-content: space-between
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 #currentQuestion {
@@ -247,6 +249,32 @@ body {
   background: white;
   box-shadow: var(--shadow-subtle);
   animation: scale 160ms ease-in-out;
+}
+
+.question-image.full-size {
+  max-height: none;
+  object-fit: cover;
+  width: 100%;
+  margin: 0;
+  display: block;
+}
+
+/* Add basic style for the new button for consistency */
+#imageToggleZoomBtn {
+  background: transparent;
+  color: var(--muted);
+  /* Use a subtle color */
+  border-radius: 5px;
+  border: 1px solid var(--muted);
+  font-weight: 600;
+  transition: all .16s ease;
+}
+
+#imageToggleZoomBtn:hover {
+  transform: translateY(-1px);
+  color: #fff;
+  border-color: #fff;
+  background: color-mix(in oklab, var(--muted) 10%, transparent);
 }
 
 @keyframes scale {

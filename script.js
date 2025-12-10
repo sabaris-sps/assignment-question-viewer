@@ -28,6 +28,7 @@ const state = {
   timerSeconds: 0,
   questions: {},
   viewingCurrentQuestion: true,
+  isFullSizeZoom: false,
 };
 
 const elements = {
@@ -71,6 +72,8 @@ const elements = {
   // progress elements
   assignmentProgressText: document.getElementById("assignmentProgressText"),
   assignmentProgressBar: document.getElementById("assignmentProgressBar"),
+  //image zoom
+  imageToggleZoomBtn: document.getElementById("imageToggleZoomBtn"),
 };
 
 let assignmentData = {};
@@ -634,6 +637,11 @@ const loadQuestion = async (questionNumber) => {
     elements.prevButton.disabled = questionNumber === 1;
     elements.nextButton.disabled = questionNumber === state.totalQuestions;
 
+    // set image zoom state
+    state.isFullSizeZoom = false;
+    elements.questionImage.classList.remove("full-size");
+    elements.imageToggleZoomBtn.textContent = "Zoom Image";
+
     // Load question image
     elements.questionImage.src = `images/${state.currentChapter}/${state.currentAssignment}/${questionNumber}.png`;
     elements.questionImage.alt = `Question ${questionNumber} image`;
@@ -735,6 +743,13 @@ const setupEventListeners = () => {
   if (elements.loadLastQuestionButton) {
     elements.loadLastQuestionButton.addEventListener("click", () => {
       toggleLastQuestion();
+    });
+  }
+
+  // handle image zoom toggle
+  if (elements.imageToggleZoomBtn) {
+    elements.imageToggleZoomBtn.addEventListener("click", () => {
+      toggleImageZoom();
     });
   }
 };
@@ -930,6 +945,15 @@ const updateQuestionNumberStyle = (questionNumber, status) => {
       questionElement.classList.add(`marked-${status}`);
     }
   }
+};
+
+const toggleImageZoom = () => {
+  state.isFullSizeZoom = !state.isFullSizeZoom;
+
+  elements.questionImage.classList.toggle("full-size", state.isFullSizeZoom);
+  elements.imageToggleZoomBtn.textContent = state.isFullSizeZoom
+    ? "Fit to Screen"
+    : "Zoom Image";
 };
 
 const startQuestionTimer = () => {

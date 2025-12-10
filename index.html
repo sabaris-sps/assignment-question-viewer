@@ -205,7 +205,13 @@
       <div class="question-container">
         <div class="question-header">
           <h2 id="currentQuestion">Select an assignment to begin</h2>
-          <button id="loadLastQuestionBtn">Load Answer Key</button>
+          <button id="loadLastQuestionBtn">Load Answer Key</button
+          ><button
+            id="imageToggleZoomBtn"
+            style="width: 120px; height: 38px; margin-left: 10px"
+          >
+            Fit to Screen
+          </button>
           <div id="questionTimer"></div>
         </div>
         <div id="questionContent">
@@ -215,7 +221,6 @@
             src=""
             alt="Question image"
             style="display: none"
-            data-action="zoom"
           />
           <div
             id="imageLoader"
