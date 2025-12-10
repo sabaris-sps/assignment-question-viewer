@@ -68,6 +68,9 @@ const elements = {
   sendResetBtn: document.getElementById("sendResetBtn"),
   backToAuthFromReset: document.getElementById("backToAuthFromReset"),
   resetError: document.getElementById("resetError"),
+  // progress elements
+  assignmentProgressText: document.getElementById("assignmentProgressText"),
+  assignmentProgressBar: document.getElementById("assignmentProgressBar"),
 };
 
 let assignmentData = {};
@@ -471,6 +474,9 @@ const loadAssignment = async () => {
     // Update question number styles for the new assignment question list
     updateQNumberStyleForAssignment();
 
+    // update progress bar
+    updateProgressIndicator();
+
     // Load first question
     await loadQuestion(1);
 
@@ -571,6 +577,37 @@ const updateQNumberStyleForAssignment = () => {
       updateQuestionNumberStyle(i, "none");
     }
   }
+};
+
+const updateProgressIndicator = () => {
+  const totalQuestions = state.totalQuestions;
+  let completedCount = 0;
+
+  // 1. Iterate through the stored questions for the current assignment
+  for (let docId in state.questions) {
+    const data = state.questions[docId];
+    if (
+      data.assignment === state.currentAssignment &&
+      data.chapter === state.currentChapter &&
+      (data.markStatus === "done" || data.markStatus === "good")
+    ) {
+      completedCount++;
+    }
+  }
+
+  // Handle the case where the assignment might be empty
+  if (totalQuestions === 0) {
+    elements.assignmentProgressBar.style.width = "0%";
+    elements.assignmentProgressText.textContent = "0/0 Completed (0%)";
+    return;
+  }
+
+  // 2. Calculate percentage
+  const percentage = Math.round((completedCount / totalQuestions) * 100);
+
+  // 3. Update the display
+  elements.assignmentProgressBar.style.width = `${percentage}%`;
+  elements.assignmentProgressText.textContent = `${completedCount}/${totalQuestions} Completed (${percentage}%)`;
 };
 
 const loadQuestion = async (questionNumber) => {
@@ -852,6 +889,7 @@ const saveMarkStatus = async (questionNumber, status) => {
 
     updateMarkButtons(status);
     updateQuestionNumberStyle(questionNumber, status);
+    updateProgressIndicator();
   } catch (error) {
     console.error("Error saving mark status:", error);
   }

@@ -91,6 +91,45 @@ body {
   z-index: 10;
 }
 
+.sidebar h3 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  align-self: center;
+}
+
+/* Progress Bar Container */
+.progress-indicator-container {
+  padding: 0 10px;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+#assignmentProgressText {
+  font-weight: 600;
+}
+
+/* Progress Bar Shell */
+.progress-bar-shell {
+  height: 8px;
+  width: 100%;
+  background: var(--surface-light);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Progress Bar Fill */
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  /* Will be set by JavaScript */
+  background: var(--done);
+  /* Use the green/done color */
+  border-radius: 4px;
+  transition: width 0.4s ease-out;
+}
+
 /* Question List */
 .question-list {
   display: grid;
